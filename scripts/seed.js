@@ -139,8 +139,12 @@ const seedProducts = [
 const seed = async () => {
   try {
     await connectDB();
-    await sequelize.sync({ force: true });
-    await Product.bulkCreate(seedProducts);
+    await sequelize.sync({ alter: true });
+    for (const product of seedProducts) {
+      const existing = await Product.findOne({ where: { handle: product.handle } });
+      if (existing) await existing.update(product);
+      else await Product.create(product);
+    }
     console.log(`Database seeded successfully with ${seedProducts.length} BEMS Books ebooks.`);
     process.exit();
   } catch (error) {
