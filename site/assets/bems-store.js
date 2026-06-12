@@ -57,6 +57,8 @@
   let allProducts = [];
 
   const money = (value) => 'NGN ' + Number(value || 0).toFixed(2);
+  const fallbackCover = '/cdn/shop/files/10_307a27ee-36dd-48cf-b0df-11b80f223bab1ef4.png';
+  const imgFallback = `onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('cover-fallback');"`;
   const byId = (id) => document.getElementById(id);
   const show = (el, message, type = 'notice') => {
     if (!el) return;
@@ -68,7 +70,7 @@
   const productCard = (product) => `
     <article class="product-card">
       <a class="cover-wrap" href="/products/${product.handle}.html">
-        <img src="${product.imageUrl}" alt="${product.title}">
+        <img src="${product.imageUrl || fallbackCover}" alt="${product.title}" ${imgFallback}>
       </a>
       <div class="card-body">
         <p class="eyebrow">${product.category || 'Ebook'}</p>
@@ -181,7 +183,7 @@
     const product = await api.product(handle);
     document.title = `${product.title} - BEMS Books`;
     detail.innerHTML = `
-      <div class="detail-cover"><img src="${product.imageUrl}" alt="${product.title}"></div>
+      <div class="detail-cover"><img src="${product.imageUrl || fallbackCover}" alt="${product.title}" ${imgFallback}></div>
       <div class="detail-panel">
         <p class="eyebrow">${product.category || 'Ebook'}</p>
         <h1>${product.title}</h1>
@@ -227,7 +229,7 @@
         <div>
           ${items.map((item) => `
             <div class="cart-item">
-              <img src="${item.product.imageUrl}" alt="${item.product.title}">
+              <img src="${item.product.imageUrl || fallbackCover}" alt="${item.product.title}" ${imgFallback}>
               <div>
                 <h3><a href="/products/${item.product.handle}.html">${item.product.title}</a></h3>
                 <p class="meta">By ${item.product.author || 'BEMS Books'} - ${item.product.format || 'Digital ebook'}</p>
