@@ -20,10 +20,13 @@ const PORT = process.env.PORT || 3000;
 const SITE_DIR = path.join(__dirname, 'site');
 const MIRRORED_CDN_DIR = path.join(__dirname, ['cdn', 'shopify', 'com'].join('.'));
 
-connectDB().then(() => {
-  sequelize.sync().then(() => {
+connectDB().then(async () => {
+  try {
+    await sequelize.sync();
     console.log('Database synced');
-  });
+  } catch (error) {
+    console.error('Database sync failed:', error.message);
+  }
 });
 
 app.use(morgan('dev'));
