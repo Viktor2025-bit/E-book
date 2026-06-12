@@ -5,11 +5,15 @@ exports.createOrder = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
     const userId = req.user.id;
-    const { shippingAddress, paymentMethod, reference } = req.body;
+    const { contactEmail, paymentMethod, reference } = req.body;
 
     if (!reference) {
       await transaction.rollback();
       return res.status(400).json({ message: 'Payment reference is required' });
+    }
+    if (!process.env.PAYSTACK_SECRET_KEY) {
+      await transaction.rollback();
+      return res.status(503).json({ message: 'Paystack secret key is not configured.' });
     }
 
     // Verify Paystack payment
@@ -64,8 +68,8 @@ exports.createOrder = async (req, res) => {
     const order = await Order.create({
       userId,
       totalAmount,
-      shippingAddress,
-      paymentMethod: 'Paystack',
+      shippingAddress: contactEmail || req.user.email,
+      paymentMethod: paymentMethod || 'Paystack',
       status: 'Paid'
     }, { transaction });
 

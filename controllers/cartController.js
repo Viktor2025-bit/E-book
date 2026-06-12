@@ -146,7 +146,7 @@ exports.clearCart = async (req, res) => {
       where: { cartId: cart.id }
     });
 
-    const updatedCart = await getOrCreateCart(userId);
+    const updatedCart = await getOrCreateCart(userId, sessionId);
     res.json(updatedCart);
   } catch (error) {
     res.status(500).json({ error: error.message });

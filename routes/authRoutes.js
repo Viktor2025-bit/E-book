@@ -8,7 +8,12 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 
 // Auth with Google
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return res.redirect('/account/login.html?google=not-configured');
+  }
+  passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+});
 
 // Google auth callback
 router.get('/google/callback', 
@@ -28,8 +33,6 @@ router.get('/logout', (req, res, next) => {
 });
 
 // Get current user
-router.get('/current_user', (req, res) => {
-  res.send(req.user);
-});
+router.get('/current_user', authController.currentUser);
 
 module.exports = router;

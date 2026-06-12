@@ -27,6 +27,20 @@ const Product = sequelize.define('Product', {
   category: {
     type: DataTypes.STRING,
   },
+  author: {
+    type: DataTypes.STRING,
+  },
+  format: {
+    type: DataTypes.STRING,
+    defaultValue: 'PDF',
+  },
+  pages: {
+    type: DataTypes.INTEGER,
+  },
+  accessNote: {
+    type: DataTypes.STRING,
+    defaultValue: 'Digital access is delivered through your BEMS Books account after payment.',
+  },
 }, {
   timestamps: true,
 });
