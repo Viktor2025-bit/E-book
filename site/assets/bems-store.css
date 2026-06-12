@@ -147,7 +147,134 @@ h3 { font-size: 20px; }
 }
 .button.secondary { background: transparent; color: var(--ink); }
 .button.gold { background: var(--gold); border-color: var(--gold); }
+.button.light { background: #fff; border-color: #fff; color: var(--ink); }
 .button:disabled { opacity: .6; cursor: not-allowed; }
+
+.bookzen-hero {
+  min-height: calc(100vh - 74px);
+  position: relative;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  background: #161616;
+}
+.bookzen-hero__media {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(17,17,17,.84) 0%, rgba(17,17,17,.58) 44%, rgba(17,17,17,.18) 100%),
+    url("/cdn/shop/files/hero-1-2ea01.jpg") center / cover no-repeat;
+  transform: scale(1.01);
+}
+.bookzen-hero__content {
+  position: relative;
+  z-index: 1;
+  padding-top: 96px;
+  padding-bottom: 120px;
+  color: #fff;
+}
+.bookzen-hero__content h1 {
+  max-width: 820px;
+  text-shadow: 0 14px 34px rgba(0,0,0,.28);
+}
+.bookzen-hero__content .lead {
+  max-width: 660px;
+  color: rgba(255,255,255,.84);
+}
+.home-promo {
+  position: relative;
+  z-index: 2;
+  margin-top: -64px;
+  padding-bottom: 38px;
+}
+.promo-grid {
+  display: grid;
+  grid-template-columns: 1.35fr .8fr .8fr;
+  gap: 22px;
+}
+.promo-tile {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #111;
+  box-shadow: var(--shadow);
+}
+.promo-tile--large { min-height: 330px; }
+.promo-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .88;
+  transition: transform .4s ease;
+}
+.promo-tile:hover img { transform: scale(1.04); }
+.promo-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.02) 10%, rgba(0,0,0,.7) 100%);
+}
+.promo-copy {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  z-index: 1;
+  color: #fff;
+}
+.promo-copy em {
+  display: block;
+  margin-bottom: 8px;
+  color: #f1c16f;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+.promo-copy strong {
+  display: block;
+  max-width: 360px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.12;
+}
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.text-link {
+  color: var(--gold);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+.category-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 28px;
+}
+.category-row a {
+  min-height: 74px;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 10px 24px rgba(50,38,24,.05);
+}
+.home-assurance { padding-top: 0; }
 
 .split {
   display: grid;
@@ -426,6 +553,13 @@ h3 { font-size: 20px; }
   .split, .product-detail, .cart-layout { grid-template-columns: 1fr; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cover-wrap { height: 370px; }
+  .promo-grid { grid-template-columns: 1fr; }
+  .promo-tile, .promo-tile--large { min-height: 260px; }
+  .section-heading {
+    display: grid;
+    align-items: start;
+  }
+  .category-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .trust-strip { grid-template-columns: 1fr; }
   .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .toolbar { grid-template-columns: 1fr; }
@@ -435,8 +569,14 @@ h3 { font-size: 20px; }
 @media (max-width: 560px) {
   .hero { min-height: auto; background-position: bottom right; background-size: 70%; }
   .hero-inner { padding-top: 54px; padding-bottom: 150px; }
+  .bookzen-hero__content {
+    padding-top: 64px;
+    padding-bottom: 96px;
+  }
+  .promo-copy strong { font-size: 20px; }
   .grid { grid-template-columns: 1fr; }
   .cover-wrap { height: 390px; }
+  .category-row { grid-template-columns: 1fr; }
   .detail-facts { grid-template-columns: 1fr; }
   .cart-item { grid-template-columns: 76px 1fr; }
   .cart-item .item-total { grid-column: 2; }
