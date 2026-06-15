@@ -26,6 +26,13 @@
   const fallbackCover = '/cdn/shop/files/10_307a27ee-36dd-48cf-b0df-11b80f223bab1ef4.png';
   const wishlistKey = 'bems-books-wishlist';
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const icons = {
+    cart: '<svg class="bems-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.7 8.5a2 2 0 0 1-2 1.5H9.1a2 2 0 0 1-2-1.6L5.2 3H2"></path><circle cx="9" cy="20" r="1.6"></circle><circle cx="18" cy="20" r="1.6"></circle></svg>',
+    eye: '<svg class="bems-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.8-6.5 10-6.5S22 12 22 12s-3.8 6.5-10 6.5S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
+    heart: '<svg class="bems-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.7 0L12 5.7l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7L12 21l8.8-8.7a5.4 5.4 0 0 0 0-7.7Z"></path></svg>',
+    sync: '<svg class="bems-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2"></path><path d="M3 12A9 9 0 0 1 18.5 5.8"></path><path d="M18.5 2v3.8H22"></path><path d="M5.5 22v-3.8H2"></path></svg>',
+    check: '<svg class="bems-action-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>',
+  };
   let products = [];
 
   const money = (value) => 'NGN ' + Number(value || 0).toLocaleString('en-NG', {
@@ -122,9 +129,9 @@
               <img src="${image}" alt="${title}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackCover}';">
             </a>
             <div class="bems-card-actions" aria-label="${title} actions">
-              <button type="button" data-add="${product.id}" aria-label="Add ${title} to cart"><span class="lnr lnr-cart"></span></button>
-              <a href="/products/${handle}.html" aria-label="View ${title}"><span class="lnr lnr-eye"></span></a>
-              <button type="button" data-love="${handle}" aria-label="Save ${title}"><span class="lnr lnr-heart"></span></button>
+              <button type="button" data-add="${product.id}" aria-label="Add ${title} to cart">${icons.cart}</button>
+              <a href="/products/${handle}.html" aria-label="View ${title}">${icons.eye}</a>
+              <button type="button" data-love="${handle}" aria-label="Save ${title}">${icons.heart}</button>
             </div>
           </div>
           <div class="bems-product-content theme-product-content">
@@ -145,11 +152,11 @@
       button.addEventListener('click', async () => {
         const oldText = button.innerHTML;
         button.disabled = true;
-        button.innerHTML = '<span class="lnr lnr-sync"></span>';
+        button.innerHTML = icons.sync;
         try {
           await endpoints.add(button.dataset.add, 1);
           await updateCartCount();
-          button.innerHTML = '<span class="lnr lnr-checkmark-circle"></span>';
+          button.innerHTML = icons.check;
           setTimeout(() => {
             button.innerHTML = oldText;
             button.disabled = false;

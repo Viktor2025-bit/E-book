@@ -667,6 +667,17 @@ body.bems-booken-home {
   color: #fff;
 }
 
+.bems-action-icon {
+  fill: none;
+  height: 20px;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 20px;
+}
+
 .bems-product-content {
   align-items: center;
   display: flex;
