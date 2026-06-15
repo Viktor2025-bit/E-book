@@ -127,6 +127,16 @@ body.bems-booken-home {
   color: var(--bems-gold);
 }
 
+.bems-header-svg {
+  fill: none;
+  height: 28px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.1;
+  width: 28px;
+}
+
 .bems-count {
   align-items: center;
   background: #071920;
