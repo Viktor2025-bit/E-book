@@ -194,6 +194,8 @@
     if (!slider) return;
     const slides = Array.from(slider.querySelectorAll('[data-slide]'));
     const dots = slider.querySelector('[data-hero-dots]');
+    const prev = slider.querySelector('[data-hero-prev]');
+    const next = slider.querySelector('[data-hero-next]');
     let active = 0;
 
     const setSlide = (index) => {
@@ -215,6 +217,9 @@
         dot.addEventListener('click', () => setSlide(index));
       });
     }
+
+    if (prev) prev.addEventListener('click', () => setSlide(active - 1));
+    if (next) next.addEventListener('click', () => setSlide(active + 1));
 
     if (!reduceMotion && slides.length > 1) {
       setInterval(() => setSlide(active + 1), 6800);
