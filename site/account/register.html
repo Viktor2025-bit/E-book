@@ -16,21 +16,46 @@
     </nav>
   </header>
   <main class="auth-wrap">
-    <section class="auth-card">
-      <p class="eyebrow">Join BEMS Books</p>
-      <h1>Create account</h1>
-      <p class="lead">Create an account to checkout and receive ebook access after payment.</p>
-      <div id="auth-message" class="hidden"></div>
-      <form id="register-form" class="form-stack">
-        <input class="input" type="text" name="username" placeholder="Full name" required>
-        <input class="input" type="email" name="email" placeholder="Email address" required>
-        <input class="input" type="password" name="password" placeholder="Password, minimum 6 characters" required minlength="6">
-        <button class="button gold" type="submit">Create account</button>
-      </form>
-      <div class="form-stack">
-        <a class="button secondary" href="/api/auth/google">Continue with Google</a>
-        <p class="meta">Already have an account? <a href="/account/login.html">Login</a></p>
-      </div>
+    <section class="auth-shell">
+      <aside class="auth-visual" aria-label="BEMS Books account benefits">
+        <a class="brand auth-brand" href="/index.html"><span class="brand-mark">BB</span><span>BEMS Books</span></a>
+        <div>
+          <p class="eyebrow">Start your digital shelf</p>
+          <h2>Create once. Read with less friction.</h2>
+          <p>Your account keeps checkout simpler and gives BEMS Books a place to connect your purchased ebooks.</p>
+        </div>
+        <div class="auth-benefits">
+          <span>Secure checkout</span>
+          <span>Digital ebook access</span>
+          <span>Curated catalog</span>
+        </div>
+      </aside>
+      <section class="auth-card">
+        <p class="eyebrow">Join BEMS Books</p>
+        <h1>Create account</h1>
+        <p class="lead">Create an account to checkout and receive ebook access after payment.</p>
+        <div id="auth-message" class="hidden"></div>
+        <form id="register-form" class="form-stack">
+          <label class="field">
+            <span>Full name</span>
+            <input class="input" type="text" name="username" placeholder="Your name" required>
+          </label>
+          <label class="field">
+            <span>Email address</span>
+            <input class="input" type="email" name="email" placeholder="you@example.com" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input class="input" type="password" name="password" placeholder="Minimum 6 characters" required minlength="6">
+          </label>
+          <button class="button gold" type="submit">Create account</button>
+        </form>
+        <div class="auth-divider"><span>or</span></div>
+        <div class="form-stack">
+          <a class="button secondary auth-google" href="/api/auth/google">Continue with Google</a>
+          <p class="meta">Already have an account? <a href="/account/login.html">Login</a></p>
+        </div>
+      </section>
     </section>
   </main>
 </body>
