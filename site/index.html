@@ -26,20 +26,21 @@
   </header>
 
   <main>
-    <section class="bookzen-hero">
+    <section class="bookzen-hero" data-hero-slider>
       <div class="bookzen-hero__media" aria-hidden="true"></div>
       <div class="container bookzen-hero__content">
-        <p class="eyebrow">BEMS digital bookstore</p>
-        <h1>Books for quiet study, bold ideas, and better work.</h1>
-        <p class="lead">A curated ebook shelf for readers, students, creators, and lifelong learners. Buy once, access digitally through your BEMS Books account.</p>
+        <p class="eyebrow" data-hero-kicker>BEMS digital bookstore</p>
+        <h1 data-hero-title>Books for quiet study, bold ideas, and better work.</h1>
+        <p class="lead" data-hero-copy>A curated ebook shelf for readers, students, creators, and lifelong learners. Buy once, access digitally through your BEMS Books account.</p>
         <div class="hero-actions">
           <a class="button gold" href="/collections/all.html">Explore collection</a>
           <a class="button light" href="#featured-books">View featured ebooks</a>
         </div>
+        <div class="hero-dots" data-hero-dots aria-label="Homepage featured slides"></div>
       </div>
     </section>
 
-    <section class="home-promo">
+    <section class="home-promo reveal-on-scroll">
       <div class="container promo-grid">
         <a class="promo-tile promo-tile--large" href="/collections/all.html">
           <img src="/cdn/shop/files/750x440367d.png" alt="Curated digital books">
@@ -56,7 +57,7 @@
       </div>
     </section>
 
-    <section class="section section-soft">
+    <section class="section section-soft reveal-on-scroll">
       <div class="container">
         <div class="section-heading">
           <div>
@@ -76,7 +77,7 @@
       </div>
     </section>
 
-    <section id="featured-books" class="section">
+    <section id="featured-books" class="section reveal-on-scroll">
       <div class="container product-container">
         <div class="section-heading">
           <div>
@@ -84,14 +85,20 @@
             <h2>Popular picks from BEMS Books</h2>
             <p class="lead">The store stays simple, but the shelf feels like a bookstore again.</p>
           </div>
+          <div class="slider-controls" aria-label="Featured ebook carousel controls">
+            <button class="slider-button" type="button" data-product-prev aria-label="Previous ebooks">&lt;</button>
+            <button class="slider-button" type="button" data-product-next aria-label="Next ebooks">&gt;</button>
+          </div>
         </div>
-        <div id="featured-products" class="grid">
-          <p class="notice">Loading featured ebooks...</p>
+        <div class="product-slider" data-product-slider>
+          <div id="featured-products" class="grid product-slider-track">
+            <p class="notice">Loading featured ebooks...</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section home-assurance">
+    <section class="section home-assurance reveal-on-scroll">
       <div class="container trust-strip">
         <div class="trust-item"><strong>Digital access</strong><span class="meta">No shipping steps. Ebook access is tied to your BEMS Books account and email.</span></div>
         <div class="trust-item"><strong>Curated catalog</strong><span class="meta">Business, technology, academic, self-help, fiction, and African literature in one focused store.</span></div>

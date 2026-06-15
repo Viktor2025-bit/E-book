@@ -69,6 +69,7 @@
   const heartIcon = '<svg class="card-icon-svg card-heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path></svg>';
   const wishlistKey = 'bems-books-wishlist';
   const byId = (id) => document.getElementById(id);
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const show = (el, message, type = 'notice') => {
     if (!el) return;
     el.className = type;
@@ -113,6 +114,140 @@
 
   const saveWishlist = (items) => {
     localStorage.setItem(wishlistKey, JSON.stringify([...new Set(items)]));
+  };
+
+  const initHeroSlider = () => {
+    const hero = document.querySelector('[data-hero-slider]');
+    if (!hero) return;
+
+    const slides = [
+      {
+        kicker: 'BEMS digital bookstore',
+        title: 'Books for quiet study, bold ideas, and better work.',
+        copy: 'A curated ebook shelf for readers, students, creators, and lifelong learners. Buy once, access digitally through your BEMS Books account.',
+        image: '/cdn/shop/files/hero-1-2ea01.jpg',
+      },
+      {
+        kicker: 'Fresh digital reads',
+        title: 'Curated ebooks for students, creators, and ambitious readers.',
+        copy: 'Move from study resources to business guides, fiction, technology, and African literature without leaving the BEMS Books store.',
+        image: '/cdn/shop/files/hero-2-1249f9.png',
+      },
+      {
+        kicker: 'Simple ebook access',
+        title: 'No shipping queues. Just secure checkout and digital access.',
+        copy: 'Shop ebooks, pay online, and keep your purchases tied to your BEMS Books account and email.',
+        image: '/cdn/shop/files/750x440367d.png',
+      },
+    ];
+
+    const kicker = hero.querySelector('[data-hero-kicker]');
+    const title = hero.querySelector('[data-hero-title]');
+    const copy = hero.querySelector('[data-hero-copy]');
+    const dots = hero.querySelector('[data-hero-dots]');
+    let active = 0;
+
+    const renderDots = () => {
+      if (!dots) return;
+      dots.innerHTML = slides.map((_, index) => (
+        `<button class="hero-dot${index === active ? ' is-active' : ''}" type="button" data-hero-dot="${index}" aria-label="Show slide ${index + 1}"></button>`
+      )).join('');
+      dots.querySelectorAll('[data-hero-dot]').forEach((button) => {
+        button.addEventListener('click', () => setSlide(Number(button.dataset.heroDot)));
+      });
+    };
+
+    const applySlide = () => {
+      const slide = slides[active];
+      hero.style.setProperty('--hero-image', `url("${slide.image}")`);
+      if (kicker) kicker.textContent = slide.kicker;
+      if (title) title.textContent = slide.title;
+      if (copy) copy.textContent = slide.copy;
+      renderDots();
+    };
+
+    const setSlide = (next) => {
+      active = (next + slides.length) % slides.length;
+      hero.classList.add('is-changing');
+      setTimeout(() => {
+        applySlide();
+        hero.classList.remove('is-changing');
+      }, 280);
+    };
+
+    applySlide();
+    if (reduceMotion) return;
+    setInterval(() => setSlide(active + 1), 6800);
+  };
+
+  const initRevealAnimations = () => {
+    const items = document.querySelectorAll('.reveal-on-scroll');
+    if (!items.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach((item) => item.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.16 });
+
+    items.forEach((item) => observer.observe(item));
+  };
+
+  const initProductSlider = (track) => {
+    if (!track) return;
+    const wrapper = track.closest('[data-product-slider]') || track;
+    const prev = document.querySelector('[data-product-prev]');
+    const next = document.querySelector('[data-product-next]');
+    let paused = false;
+
+    const getStep = () => {
+      const card = track.querySelector('.product-card');
+      if (!card) return track.clientWidth;
+      const styles = getComputedStyle(track);
+      const parsedGap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+      const gap = Number.isNaN(parsedGap) ? 0 : parsedGap;
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    const maxScroll = () => Math.max(0, track.scrollWidth - track.clientWidth);
+    const canSlide = () => maxScroll() > 4;
+
+    const move = (direction = 1) => {
+      if (!canSlide()) return;
+      const end = maxScroll();
+      if (direction > 0 && track.scrollLeft >= end - 4) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+        return;
+      }
+      if (direction < 0 && track.scrollLeft <= 4) {
+        track.scrollTo({ left: end, behavior: 'smooth' });
+        return;
+      }
+      track.scrollBy({ left: getStep() * direction, behavior: 'smooth' });
+    };
+
+    [wrapper, track].forEach((el) => {
+      el.addEventListener('mouseenter', () => { paused = true; });
+      el.addEventListener('mouseleave', () => { paused = false; });
+      el.addEventListener('focusin', () => { paused = true; });
+      el.addEventListener('focusout', () => { paused = false; });
+    });
+
+    if (prev) prev.addEventListener('click', () => move(-1));
+    if (next) next.addEventListener('click', () => move(1));
+
+    if (!reduceMotion) {
+      setInterval(() => {
+        if (!paused) move(1);
+      }, 6400);
+    }
   };
 
   const bindLoveButtons = () => {
@@ -194,6 +329,7 @@
     featured.innerHTML = allProducts.slice(0, 8).map(productCard).join('');
     bindAddButtons();
     bindLoveButtons();
+    initProductSlider(featured);
   };
 
   const initCollection = async () => {
@@ -432,7 +568,11 @@
     await hydrateHeader();
     const page = document.body.dataset.page;
     try {
-      if (page === 'home') await initHome();
+      if (page === 'home') {
+        initHeroSlider();
+        initRevealAnimations();
+        await initHome();
+      }
       if (page === 'collection') await initCollection();
       if (page === 'product') await initProduct();
       if (page === 'cart') await renderCart();
