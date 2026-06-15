@@ -5,116 +5,227 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>BEMS Books - Premium ebooks for curious readers</title>
   <meta name="description" content="BEMS Books is a standalone ebook store for fiction, business, technology, academic, self-help, children, and African literature titles.">
-  <link rel="stylesheet" href="/assets/bems-store.css">
-  <script src="/assets/bems-store.js" defer></script>
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/bootstrap.minf96d.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/icons.min35dc.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/icofont.minc387.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/animate9ec8.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/slick-slider399b.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/stylee22a.css">
+  <link rel="stylesheet" href="/booken/cdn/shop/t/21/assets/theme-responsive56e3.css">
+  <link rel="stylesheet" href="/assets/booken-bems.css">
+  <script src="/assets/booken-bems.js" defer></script>
 </head>
-<body data-page="home">
-  <header class="site-header">
-    <nav class="nav" aria-label="Main navigation">
-      <a class="brand" href="/index.html"><span class="brand-mark">BB</span><span>BEMS Books</span></a>
-      <div class="nav-links">
-        <a href="/collections/all.html">Ebooks</a>
-        <a href="/pages/about.html">About</a>
-        <a href="/pages/faq.html">FAQ</a>
-        <a href="/pages/contact.html">Contact</a>
+<body data-page="home" class="bems-booken-home">
+  <header class="header-area sticky-bar transparent_disable menu-center bems-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-xl-2 col-lg-2 col-md-4 col-6">
+          <a class="bems-logo" href="/index.html" aria-label="BEMS Books home">
+            <span class="bems-logo__mark">BB</span>
+            <span class="bems-logo__text">BEMS Books</span>
+          </a>
+        </div>
+        <div class="col-xl-7 col-lg-7 d-none d-lg-block">
+          <nav class="main-menu bems-main-menu" aria-label="Main navigation">
+            <ul>
+              <li><a href="/index.html">Home</a></li>
+              <li><a href="/collections/all.html">Ebooks</a></li>
+              <li><a href="#bems-categories">Categories</a></li>
+              <li><a href="/pages/about.html">About</a></li>
+              <li><a href="/pages/faq.html">FAQ</a></li>
+              <li><a href="/pages/contact.html">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-8 col-6">
+          <div class="header-right-wrap bems-header-actions">
+            <button class="bems-icon-btn" type="button" data-search-toggle aria-label="Search ebooks">
+              <span class="lnr lnr-magnifier"></span>
+            </button>
+            <a class="bems-icon-btn" data-account-link href="/account/login.html" aria-label="Account">
+              <span class="lnr lnr-user"></span>
+            </a>
+            <button class="bems-icon-btn" type="button" data-wishlist-toggle aria-label="Saved ebooks">
+              <span class="lnr lnr-heart"></span>
+              <span class="bems-count" data-wishlist-count>0</span>
+            </button>
+            <a class="bems-icon-btn" href="/cart.html" aria-label="Cart">
+              <span class="lnr lnr-cart"></span>
+              <span class="bems-count" data-cart-count>0</span>
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="nav-actions">
-        <a data-account-link href="/account/login.html">Login</a>
-        <a class="cart-link" href="/cart.html">Cart <span class="cart-count" data-cart-count>0</span></a>
-      </div>
-    </nav>
+    </div>
   </header>
 
+  <div class="bems-search-panel" data-search-panel hidden>
+    <div class="container">
+      <form class="bems-search" data-search-form>
+        <input type="search" name="q" placeholder="Search ebooks by title, author, or category" autocomplete="off">
+        <button type="submit">Search</button>
+        <button type="button" data-search-close aria-label="Close search">x</button>
+      </form>
+      <div class="bems-search-results" data-search-results></div>
+    </div>
+  </div>
+
   <main>
-    <section class="bookzen-hero" data-hero-slider>
-      <div class="bookzen-hero__media" aria-hidden="true"></div>
-      <div class="container bookzen-hero__content">
-        <p class="eyebrow" data-hero-kicker>BEMS digital bookstore</p>
-        <h1 data-hero-title>Books for quiet study, bold ideas, and better work.</h1>
-        <p class="lead" data-hero-copy>A curated ebook shelf for readers, students, creators, and lifelong learners. Buy once, access digitally through your BEMS Books account.</p>
-        <div class="hero-actions">
-          <a class="button gold" href="/collections/all.html">Explore collection</a>
-          <a class="button light" href="#featured-books">View featured ebooks</a>
+    <section class="slider-area default slider_style_1 bems-hero-slider" data-hero-slider aria-label="BEMS Books featured slides">
+      <div class="bems-slide is-active" data-slide>
+        <div class="single-slider d-flex align-items-center">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6">
+                <div class="slider-content-1 slider-animated-1">
+                  <h5>New digital collection</h5>
+                  <h1>Build a sharper library with BEMS Books.</h1>
+                  <p>Curated ebooks for focused readers, students, founders, and lifelong learners.</p>
+                  <div class="slider-btn btn-hover">
+                    <a href="/collections/all.html">Shop ebooks</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="bems-hero-image">
+                  <img src="/booken/cdn/shop/files/home-1-slider-13b10.png" alt="BEMS Books featured ebook stack">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="hero-dots" data-hero-dots aria-label="Homepage featured slides"></div>
       </div>
+      <div class="bems-slide" data-slide>
+        <div class="single-slider d-flex align-items-center">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6">
+                <div class="slider-content-1 slider-animated-1">
+                  <h5>Business, study, stories</h5>
+                  <h1>Simple checkout. Instant digital reading direction.</h1>
+                  <p>Buy once and keep your ebook access connected to your BEMS Books account and email.</p>
+                  <div class="slider-btn btn-hover">
+                    <a href="#featured-books">View featured picks</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="bems-hero-image">
+                  <img src="/booken/cdn/shop/files/home-1-slider-2a589.png" alt="Digital reading collection">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bems-slide" data-slide>
+        <div class="single-slider d-flex align-items-center">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-lg-6 col-md-6">
+                <div class="slider-content-1 slider-animated-1">
+                  <h5>Curated for curious minds</h5>
+                  <h1>Find better reads for work, school, and growth.</h1>
+                  <p>Explore fiction, African literature, self-help, technology, academic, and business ebooks.</p>
+                  <div class="slider-btn btn-hover">
+                    <a href="#bems-categories">Browse categories</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <div class="bems-hero-image">
+                  <img src="/booken/cdn/shop/files/home-2-siider-1_b7084a39-db26-4dc2-8dfb-5688d8912c2a6ace.png" alt="Curated ebook display">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bems-hero-dots" data-hero-dots></div>
     </section>
 
-    <section class="home-promo reveal-on-scroll">
-      <div class="container promo-grid">
-        <a class="promo-tile promo-tile--large" href="/collections/all.html">
-          <img src="/cdn/shop/files/750x440367d.png" alt="Curated digital books">
-          <span class="promo-copy"><em>Fresh arrivals</em><strong>Curated ebooks for focused readers</strong></span>
-        </a>
-        <a class="promo-tile" href="/collections/all.html">
-          <img src="/cdn/shop/files/440x4380fed.png" alt="Study resources">
-          <span class="promo-copy"><em>Academic</em><strong>Study smarter</strong></span>
-        </a>
-        <a class="promo-tile" href="/collections/all.html">
-          <img src="/cdn/shop/files/440x438-27d74.png" alt="Business and self development ebooks">
-          <span class="promo-copy"><em>Skills</em><strong>Build your next chapter</strong></span>
-        </a>
-      </div>
-    </section>
-
-    <section class="section section-soft reveal-on-scroll">
+    <section id="bems-categories" class="best_collection_area bems-category-area">
       <div class="container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Browse by interest</p>
-            <h2>Find your next digital read</h2>
-          </div>
-          <a class="text-link" href="/collections/all.html">View all ebooks</a>
+        <div class="section-title text-center">
+          <h2>Explore ebook categories</h2>
+          <p>Focused shelves for the way you read, learn, and build.</p>
         </div>
-        <div class="category-row">
-          <a href="/collections/all.html">Fiction</a>
-          <a href="/collections/all.html">Business</a>
-          <a href="/collections/all.html">Technology</a>
-          <a href="/collections/all.html">Self-Help</a>
-          <a href="/collections/all.html">Academic</a>
-          <a href="/collections/all.html">African Literature</a>
+        <div class="bems-category-grid">
+          <a href="/collections/all.html?category=Fiction"><span>Fiction</span><small>Stories and imagination</small></a>
+          <a href="/collections/all.html?category=Business"><span>Business</span><small>Ideas for better work</small></a>
+          <a href="/collections/all.html?category=Technology"><span>Technology</span><small>Digital skills and trends</small></a>
+          <a href="/collections/all.html?category=Self-Help"><span>Self-Help</span><small>Growth and discipline</small></a>
+          <a href="/collections/all.html?category=Academic"><span>Academic</span><small>Study resources</small></a>
+          <a href="/collections/all.html?category=African Literature"><span>African Literature</span><small>Voices close to home</small></a>
         </div>
       </div>
     </section>
 
-    <section id="featured-books" class="section reveal-on-scroll">
-      <div class="container product-container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Featured ebooks</p>
-            <h2>Popular picks from BEMS Books</h2>
-            <p class="lead">The store stays simple, but the shelf feels like a bookstore again.</p>
-          </div>
-          <div class="slider-controls" aria-label="Featured ebook carousel controls">
-            <button class="slider-button" type="button" data-product-prev aria-label="Previous ebooks">&lt;</button>
-            <button class="slider-button" type="button" data-product-next aria-label="Next ebooks">&gt;</button>
-          </div>
+    <section id="featured-books" class="product-area common_slick_slider bems-product-area">
+      <div class="container">
+        <div class="section-title text-center">
+          <h2>Featured ebooks</h2>
+          <p>Popular BEMS Books picks presented with the original clean product-card feel.</p>
         </div>
-        <div class="product-slider" data-product-slider>
-          <div id="featured-products" class="grid product-slider-track">
-            <p class="notice">Loading featured ebooks...</p>
+        <div class="bems-carousel-shell">
+          <button class="bems-carousel-btn bems-carousel-btn--prev" type="button" data-products-prev aria-label="Previous ebooks">&#8249;</button>
+          <div class="bems-product-track" id="featured-products" data-product-track>
+            <p class="bems-loading">Loading featured ebooks...</p>
+          </div>
+          <button class="bems-carousel-btn bems-carousel-btn--next" type="button" data-products-next aria-label="Next ebooks">&#8250;</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bems-banner-area">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 col-md-6">
+            <a class="bems-banner" href="/collections/all.html">
+              <img src="/booken/cdn/shop/files/banner-10777.png" alt="Curated ebook offers">
+              <span><small>Digital shelf</small><strong>Fresh titles for focused readers</strong></span>
+            </a>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <a class="bems-banner" href="/collections/all.html">
+              <img src="/booken/cdn/shop/files/banner-25217.png" alt="Study and business ebooks">
+              <span><small>Study smarter</small><strong>Academic and business ebooks</strong></span>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section home-assurance reveal-on-scroll">
-      <div class="container trust-strip">
-        <div class="trust-item"><strong>Digital access</strong><span class="meta">No shipping steps. Ebook access is tied to your BEMS Books account and email.</span></div>
-        <div class="trust-item"><strong>Curated catalog</strong><span class="meta">Business, technology, academic, self-help, fiction, and African literature in one focused store.</span></div>
-        <div class="trust-item"><strong>Secure checkout</strong><span class="meta">Cart, account, and Paystack-ready payment flow handled by the local BEMS backend.</span></div>
+    <section class="bems-assurance-area">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-4">
+            <div class="bems-assurance"><strong>Digital access</strong><p>No shipping forms. Your ebook purchase is connected to your account and email.</p></div>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <div class="bems-assurance"><strong>Curated catalog</strong><p>Business, technology, fiction, self-help, academic, children, and African literature.</p></div>
+          </div>
+          <div class="col-lg-4 col-md-4">
+            <div class="bems-assurance"><strong>Secure checkout</strong><p>Cart, account, and Paystack-ready payment flow powered by the BEMS backend.</p></div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div><a class="brand" href="/index.html"><span class="brand-mark">BB</span><span>BEMS Books</span></a><p>Premium ebooks for curious readers, students, creators, and lifelong learners.</p></div>
-      <div><h3>Shop</h3><a href="/collections/all.html">All ebooks</a><br><a href="/cart.html">Cart</a></div>
-      <div><h3>Company</h3><a href="/pages/about.html">About</a><br><a href="/pages/contact.html">Contact</a><br><a href="/pages/faq.html">FAQ</a></div>
-      <div><h3>Policies</h3><a href="/policies/privacy-policy.html">Privacy</a><br><a href="/policies/refund-policy.html">Refunds</a><br><a href="/policies/terms-of-service.html">Terms</a></div>
+  <footer class="bems-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-6">
+          <a class="bems-logo bems-logo--footer" href="/index.html"><span class="bems-logo__mark">BB</span><span class="bems-logo__text">BEMS Books</span></a>
+          <p>Premium ebooks for curious readers, students, creators, and lifelong learners.</p>
+        </div>
+        <div class="col-lg-2 col-md-6"><h4>Shop</h4><a href="/collections/all.html">All ebooks</a><a href="/cart.html">Cart</a></div>
+        <div class="col-lg-3 col-md-6"><h4>Company</h4><a href="/pages/about.html">About</a><a href="/pages/contact.html">Contact</a><a href="/pages/faq.html">FAQ</a></div>
+        <div class="col-lg-3 col-md-6"><h4>Policies</h4><a href="/policies/privacy-policy.html">Privacy</a><a href="/policies/refund-policy.html">Refunds</a><a href="/policies/terms-of-service.html">Terms</a></div>
+      </div>
+      <div class="bems-footer-bottom">Copyright 2026 BEMS Books. Standalone ebook store.</div>
     </div>
-    <div class="container footer-bottom">Copyright 2026 BEMS Books. Standalone ebook store.</div>
   </footer>
 </body>
 </html>
