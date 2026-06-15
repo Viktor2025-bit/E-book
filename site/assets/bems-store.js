@@ -57,6 +57,12 @@
   let allProducts = [];
 
   const money = (value) => 'NGN ' + Number(value || 0).toFixed(2);
+  const compareMoney = (value) => 'NGN ' + (Number(value || 0) * 1.18).toFixed(2);
+  const saleBadge = (value) => {
+    const price = Number(value || 0);
+    const compareAt = price * 1.18;
+    return `Save ${Math.round(((compareAt - price) / compareAt) * 100)}%`;
+  };
   const fallbackCover = '/cdn/shop/files/10_307a27ee-36dd-48cf-b0df-11b80f223bab1ef4.png';
   const imgFallback = `onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('cover-fallback');"`;
   const viewIcon = '<svg class="card-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
@@ -73,6 +79,7 @@
   const productCard = (product) => `
     <article class="product-card">
       <div class="product-card__thumbnail">
+        <span class="sale-badge">${saleBadge(product.price)}</span>
         <a class="cover-wrap" href="/products/${product.handle}.html">
           <img src="${product.imageUrl || fallbackCover}" alt="${product.title}" ${imgFallback}>
         </a>
@@ -87,11 +94,10 @@
         </div>
       </div>
       <div class="card-body">
-        <p class="meta">${product.author || 'BEMS Books'} - ${product.format || 'Digital ebook'}</p>
         <h3><a href="/products/${product.handle}.html">${product.title}</a></h3>
-        <p class="eyebrow">${product.category || 'Ebook'}</p>
         <div class="price-row">
           <span class="price">${money(product.price)}</span>
+          <span class="compare-price">${compareMoney(product.price)}</span>
         </div>
       </div>
     </article>
