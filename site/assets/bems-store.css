@@ -404,6 +404,14 @@ h3 { font-size: 20px; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.love-button.is-loved {
+  background: #fff3f1;
+  border-color: #d96553;
+  color: #d04737;
+}
+.love-button.is-loved .card-heart-svg {
+  fill: currentColor;
+}
 .card-icon-button:hover {
   background: var(--gold);
   border-color: var(--gold);

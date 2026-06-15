@@ -60,6 +60,8 @@
   const fallbackCover = '/cdn/shop/files/10_307a27ee-36dd-48cf-b0df-11b80f223bab1ef4.png';
   const imgFallback = `onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('cover-fallback');"`;
   const viewIcon = '<svg class="card-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+  const heartIcon = '<svg class="card-icon-svg card-heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path></svg>';
+  const wishlistKey = 'bems-books-wishlist';
   const byId = (id) => document.getElementById(id);
   const show = (el, message, type = 'notice') => {
     if (!el) return;
@@ -79,6 +81,9 @@
           <a class="card-icon-button" href="/products/${product.handle}.html" aria-label="View ${product.title}">
             ${viewIcon}
           </a>
+          <button class="card-icon-button love-button" type="button" data-love="${product.handle}" aria-label="Save ${product.title} to wishlist">
+            ${heartIcon}
+          </button>
         </div>
       </div>
       <div class="card-body">
@@ -91,6 +96,38 @@
       </div>
     </article>
   `;
+
+  const getWishlist = () => {
+    try {
+      return JSON.parse(localStorage.getItem(wishlistKey) || '[]');
+    } catch (_) {
+      return [];
+    }
+  };
+
+  const saveWishlist = (items) => {
+    localStorage.setItem(wishlistKey, JSON.stringify([...new Set(items)]));
+  };
+
+  const bindLoveButtons = () => {
+    const saved = getWishlist();
+    document.querySelectorAll('[data-love]').forEach((button) => {
+      const handle = button.dataset.love;
+      button.classList.toggle('is-loved', saved.includes(handle));
+      button.setAttribute('aria-pressed', saved.includes(handle) ? 'true' : 'false');
+
+      button.addEventListener('click', () => {
+        const latest = getWishlist();
+        const index = latest.indexOf(handle);
+        if (index >= 0) latest.splice(index, 1);
+        else latest.push(handle);
+        saveWishlist(latest);
+        const loved = latest.includes(handle);
+        button.classList.toggle('is-loved', loved);
+        button.setAttribute('aria-pressed', loved ? 'true' : 'false');
+      });
+    });
+  };
 
   const bindAddButtons = () => {
     document.querySelectorAll('[data-add]').forEach((button) => {
@@ -150,6 +187,7 @@
     allProducts = await api.products();
     featured.innerHTML = allProducts.slice(0, 8).map(productCard).join('');
     bindAddButtons();
+    bindLoveButtons();
   };
 
   const initCollection = async () => {
@@ -181,6 +219,7 @@
         ? products.map(productCard).join('')
         : '<p class="notice">No ebooks matched your search. Try another title, author, or category.</p>';
       bindAddButtons();
+      bindLoveButtons();
     };
 
     [search, category, sort].forEach((el) => el.addEventListener('input', render));
