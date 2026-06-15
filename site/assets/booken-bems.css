@@ -102,7 +102,7 @@ body.bems-booken-home {
 .bems-header-actions {
   align-items: center;
   display: flex;
-  gap: 15px;
+  gap: 24px;
   justify-content: flex-end;
 }
 
@@ -113,7 +113,7 @@ body.bems-booken-home {
   color: #071920;
   cursor: pointer;
   display: inline-flex;
-  font-size: 28px;
+  font-size: 30px;
   height: 42px;
   justify-content: center;
   line-height: 1;
@@ -140,8 +140,8 @@ body.bems-booken-home {
   min-width: 20px;
   padding: 0 5px;
   position: absolute;
-  right: -9px;
-  top: 0;
+  right: -7px;
+  top: -8px;
 }
 
 .bems-search-panel {
