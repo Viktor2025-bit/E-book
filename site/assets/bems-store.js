@@ -59,6 +59,7 @@
   const money = (value) => 'NGN ' + Number(value || 0).toFixed(2);
   const fallbackCover = '/cdn/shop/files/10_307a27ee-36dd-48cf-b0df-11b80f223bab1ef4.png';
   const imgFallback = `onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('cover-fallback');"`;
+  const viewIcon = '<svg class="card-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
   const byId = (id) => document.getElementById(id);
   const show = (el, message, type = 'notice') => {
     if (!el) return;
@@ -69,16 +70,23 @@
 
   const productCard = (product) => `
     <article class="product-card">
-      <a class="cover-wrap" href="/products/${product.handle}.html">
-        <img src="${product.imageUrl || fallbackCover}" alt="${product.title}" ${imgFallback}>
-      </a>
+      <div class="product-card__thumbnail">
+        <a class="cover-wrap" href="/products/${product.handle}.html">
+          <img src="${product.imageUrl || fallbackCover}" alt="${product.title}" ${imgFallback}>
+        </a>
+        <div class="product-card__actions" aria-label="${product.title} actions">
+          <button class="card-icon-button" type="button" data-add="${product.id}" aria-label="Add ${product.title} to cart">+</button>
+          <a class="card-icon-button" href="/products/${product.handle}.html" aria-label="View ${product.title}">
+            ${viewIcon}
+          </a>
+        </div>
+      </div>
       <div class="card-body">
-        <p class="eyebrow">${product.category || 'Ebook'}</p>
+        <p class="meta">${product.author || 'BEMS Books'} - ${product.format || 'Digital ebook'}</p>
         <h3><a href="/products/${product.handle}.html">${product.title}</a></h3>
-        <p class="meta">By ${product.author || 'BEMS Books'} - ${product.format || 'Digital ebook'}</p>
+        <p class="eyebrow">${product.category || 'Ebook'}</p>
         <div class="price-row">
           <span class="price">${money(product.price)}</span>
-          <button class="button gold" data-add="${product.id}">Add</button>
         </div>
       </div>
     </article>
@@ -87,17 +95,23 @@
   const bindAddButtons = () => {
     document.querySelectorAll('[data-add]').forEach((button) => {
       button.addEventListener('click', async () => {
-        const label = button.textContent;
+        const compact = button.classList.contains('card-icon-button');
+        const label = compact ? button.innerHTML : button.textContent;
         button.disabled = true;
-        button.textContent = 'Adding';
+        button.textContent = compact ? '...' : 'Adding';
         try {
           const cart = await api.add(button.dataset.add, 1);
           updateCartCount(cart);
-          button.textContent = 'Added';
-          setTimeout(() => { button.textContent = label; button.disabled = false; }, 900);
+          button.textContent = compact ? 'OK' : 'Added';
+          setTimeout(() => {
+            if (compact) button.innerHTML = label;
+            else button.textContent = label;
+            button.disabled = false;
+          }, 900);
         } catch (error) {
           alert(error.message);
-          button.textContent = label;
+          if (compact) button.innerHTML = label;
+          else button.textContent = label;
           button.disabled = false;
         }
       });
