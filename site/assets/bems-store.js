@@ -67,6 +67,9 @@
   const imgFallback = `onerror="this.onerror=null;this.src='${fallbackCover}';this.classList.add('cover-fallback');"`;
   const viewIcon = '<svg class="card-icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 12s4-7 10.5-7 10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
   const heartIcon = '<svg class="card-icon-svg card-heart-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path></svg>';
+  const searchIcon = '<svg class="nav-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="6.8"></circle><path d="M14 14l4 4"></path></svg>';
+  const accountIcon = '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>';
+  const bagIcon = '<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>';
   const wishlistKey = 'bems-books-wishlist';
   const byId = (id) => document.getElementById(id);
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -114,6 +117,42 @@
 
   const saveWishlist = (items) => {
     localStorage.setItem(wishlistKey, JSON.stringify([...new Set(items)]));
+  };
+
+  const updateWishlistCount = () => {
+    const count = getWishlist().length;
+    document.querySelectorAll('[data-wishlist-count]').forEach((el) => {
+      el.textContent = count;
+      el.classList.toggle('is-empty', count === 0);
+    });
+  };
+
+  const renderHeaderActions = () => {
+    document.querySelectorAll('.nav-actions').forEach((actions) => {
+      actions.innerHTML = `
+        <a class="nav-icon-button" href="/collections/all.html" aria-label="Search ebooks" title="Search ebooks">${searchIcon}</a>
+        <a class="nav-icon-button" data-account-link href="/account/login.html" aria-label="Account" title="Account">${accountIcon}</a>
+        <button class="nav-icon-button" type="button" data-wishlist-nav aria-label="Saved ebooks" title="Saved ebooks">
+          ${heartIcon}
+          <span class="nav-count" data-wishlist-count>0</span>
+        </button>
+        <a class="nav-icon-button" href="/cart.html" aria-label="Cart" title="Cart">
+          ${bagIcon}
+          <span class="nav-count cart-count" data-cart-count>0</span>
+        </a>
+      `;
+    });
+
+    document.querySelectorAll('[data-wishlist-nav]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const count = getWishlist().length;
+        const message = count
+          ? `You have ${count} saved ebook${count === 1 ? '' : 's'} on this browser.`
+          : 'Tap the heart on a book card to save ebooks here.';
+        alert(message);
+      });
+    });
+    updateWishlistCount();
   };
 
   const initHeroSlider = () => {
@@ -266,8 +305,10 @@
         const loved = latest.includes(handle);
         button.classList.toggle('is-loved', loved);
         button.setAttribute('aria-pressed', loved ? 'true' : 'false');
+        updateWishlistCount();
       });
     });
+    updateWishlistCount();
   };
 
   const bindAddButtons = () => {
@@ -311,7 +352,13 @@
     document.querySelectorAll('[data-account-link]').forEach((link) => {
       if (currentUser) {
         link.href = '/api/auth/logout';
-        link.textContent = currentUser.displayName ? `Logout (${currentUser.displayName})` : 'Logout';
+        const label = currentUser.displayName ? `Logout (${currentUser.displayName})` : 'Logout';
+        if (link.classList.contains('nav-icon-button')) {
+          link.setAttribute('aria-label', label);
+          link.setAttribute('title', label);
+        } else {
+          link.textContent = label;
+        }
       }
     });
 
@@ -565,6 +612,7 @@
   };
 
   document.addEventListener('DOMContentLoaded', async () => {
+    renderHeaderActions();
     await hydrateHeader();
     const page = document.body.dataset.page;
     try {
