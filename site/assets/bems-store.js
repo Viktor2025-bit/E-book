@@ -561,10 +561,7 @@
           <p class="meta">Your ebooks are made available through your account after confirmed payment.</p>
           <label for="delivery-email" class="meta access-email-label">Access email</label>
           <input id="delivery-email" class="input" type="email" value="${currentUser ? currentUser.email : ''}" placeholder="you@example.com">
-          <button id="checkout-button" class="button checkout-primary" type="button">
-            <span>Secure checkout</span>
-            <small>Paystack protected payment</small>
-          </button>
+          <button id="checkout-button" class="button checkout-primary" type="button">Secure checkout</button>
           <button id="clear-cart-button" class="button checkout-secondary" type="button">Clear cart</button>
           <div id="checkout-message" class="hidden" style="margin-top:14px;"></div>
         </aside>

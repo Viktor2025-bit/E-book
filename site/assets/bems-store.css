@@ -962,28 +962,18 @@ h3 { font-size: 20px; }
 }
 .checkout-primary {
   width: 100%;
-  min-height: 62px;
+  min-height: 56px;
   margin-top: 16px;
-  display: grid;
-  gap: 3px;
-  place-items: center;
   border: 1px solid #173f3a;
   background: linear-gradient(135deg, #10282f 0%, #173f3a 100%);
   color: #fff;
+  font-size: 16px;
+  font-weight: 800;
   box-shadow: 0 14px 28px rgba(16,40,47,.18);
 }
 .checkout-primary:hover {
   background: linear-gradient(135deg, #173f3a 0%, #10282f 100%);
   color: #fff;
-}
-.checkout-primary span {
-  font-size: 16px;
-  font-weight: 800;
-}
-.checkout-primary small {
-  color: rgba(255,255,255,.68);
-  font-size: 12px;
-  font-weight: 600;
 }
 .checkout-secondary {
   width: 100%;
