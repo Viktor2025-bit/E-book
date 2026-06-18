@@ -516,13 +516,13 @@ body.bems-booken-home {
 
 .bems-category-area {
   background:
-    radial-gradient(circle at 10% 10%, rgba(255, 97, 98, 0.08), transparent 28%),
-    linear-gradient(180deg, #ffffff 0%, #f8fbfa 100%);
+    radial-gradient(circle at 12% 8%, rgba(189, 132, 43, 0.08), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f4f8f6 100%);
   position: relative;
 }
 
 .bems-category-area::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 97, 98, 0.18), transparent);
+  background: linear-gradient(90deg, transparent, rgba(23, 63, 58, 0.16), rgba(189, 132, 43, 0.18), transparent);
   content: "";
   height: 1px;
   left: 8%;
@@ -538,13 +538,13 @@ body.bems-booken-home {
 }
 
 .bems-category-card {
-  --cat-bg: #f5fdff;
-  --cat-accent: #ff6162;
-  --cat-soft: rgba(255, 97, 98, 0.14);
+  --cat-bg: #f7f6f1;
+  --cat-accent: #173f3a;
+  --cat-soft: rgba(23, 63, 58, 0.1);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0) 54%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.28) 58%),
     var(--cat-bg);
-  border: 1px solid #ece7df;
+  border: 1px solid rgba(23, 63, 58, 0.12);
   color: var(--bems-ink);
   display: flex;
   flex-direction: column;
@@ -581,16 +581,16 @@ body.bems-booken-home {
 }
 
 .bems-category-card:hover {
-  border-color: rgba(255, 97, 98, 0.34);
-  box-shadow: 0 22px 48px rgba(19, 39, 47, 0.12);
+  border-color: rgba(189, 132, 43, 0.36);
+  box-shadow: 0 22px 48px rgba(19, 39, 47, 0.13);
   transform: translateY(-7px);
 }
 
 .bems-category-icon {
   align-items: center;
-  background: #fff;
-  border: 1px solid rgba(19, 39, 47, 0.08);
-  box-shadow: 0 14px 26px rgba(19, 39, 47, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(23, 63, 58, 0.1);
+  box-shadow: 0 14px 26px rgba(19, 39, 47, 0.07);
   color: var(--cat-accent);
   display: flex;
   height: 60px;
@@ -649,39 +649,39 @@ body.bems-booken-home {
 }
 
 .bems-category-card--fiction {
-  --cat-bg: #f6efff;
-  --cat-accent: #8b5ed7;
-  --cat-soft: rgba(139, 94, 215, 0.14);
+  --cat-bg: #f4f5f0;
+  --cat-accent: #173f3a;
+  --cat-soft: rgba(23, 63, 58, 0.1);
 }
 
 .bems-category-card--business {
-  --cat-bg: #fff6e8;
+  --cat-bg: #f8f1e4;
   --cat-accent: #bd842b;
-  --cat-soft: rgba(189, 132, 43, 0.16);
+  --cat-soft: rgba(189, 132, 43, 0.14);
 }
 
 .bems-category-card--technology {
-  --cat-bg: #edf7fb;
-  --cat-accent: #24769b;
-  --cat-soft: rgba(36, 118, 155, 0.14);
+  --cat-bg: #eef4f5;
+  --cat-accent: #13272f;
+  --cat-soft: rgba(19, 39, 47, 0.1);
 }
 
 .bems-category-card--self {
-  --cat-bg: #f3f9ef;
-  --cat-accent: #4b9152;
-  --cat-soft: rgba(75, 145, 82, 0.15);
+  --cat-bg: #f1f6f0;
+  --cat-accent: #2f5c45;
+  --cat-soft: rgba(47, 92, 69, 0.12);
 }
 
 .bems-category-card--academic {
-  --cat-bg: #fff0f1;
-  --cat-accent: #d84e5f;
-  --cat-soft: rgba(216, 78, 95, 0.14);
+  --cat-bg: #f7f1ec;
+  --cat-accent: #8a4f2f;
+  --cat-soft: rgba(138, 79, 47, 0.12);
 }
 
 .bems-category-card--african {
-  --cat-bg: #f0f7f2;
-  --cat-accent: #1f7a63;
-  --cat-soft: rgba(31, 122, 99, 0.15);
+  --cat-bg: #eef6f2;
+  --cat-accent: #1f6b58;
+  --cat-soft: rgba(31, 107, 88, 0.13);
 }
 
 .bems-product-area {
