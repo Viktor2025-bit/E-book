@@ -436,7 +436,10 @@
           <div class="fact"><strong>${product.format || 'PDF'}</strong><span>Format</span></div>
           <div class="fact"><strong>${product.pages || '-'}</strong><span>Pages</span></div>
         </div>
-        <p class="notice">${product.accessNote || 'Digital access is delivered through your BEMS Books account after payment.'}</p>
+        <div class="access-panel">
+          <strong>Digital access after payment</strong>
+          <span>${product.accessNote || 'Digital access is delivered through your BEMS Books account after payment.'}</span>
+        </div>
         <div class="hero-actions">
           <button class="button gold" data-add="${product.id}">Add to cart</button>
           <a class="button secondary" href="/collections/all.html">Keep browsing</a>
@@ -456,7 +459,7 @@
 
     if (!items.length) {
       cartRoot.innerHTML = `
-        <div class="summary-card">
+        <div class="summary-card empty-cart-card">
           <h2>Your cart is empty</h2>
           <p class="lead">Add ebooks to your cart and they will appear here.</p>
           <a class="button gold" href="/collections/all.html">Browse ebooks</a>
@@ -468,7 +471,11 @@
     const subtotal = items.reduce((sum, item) => sum + Number(item.product.price || 0) * item.quantity, 0);
     cartRoot.innerHTML = `
       <div class="cart-layout">
-        <div>
+        <div class="cart-list-card">
+          <div class="cart-list-heading">
+            <h2>Selected ebooks</h2>
+            <span>${items.length} item${items.length === 1 ? '' : 's'}</span>
+          </div>
           ${items.map((item) => `
             <div class="cart-item">
               <img src="${item.product.imageUrl || fallbackCover}" alt="${item.product.title}" ${imgFallback}>
@@ -476,9 +483,9 @@
                 <h3><a href="/products/${item.product.handle}.html">${item.product.title}</a></h3>
                 <p class="meta">By ${item.product.author || 'BEMS Books'} - ${item.product.format || 'Digital ebook'}</p>
                 <div class="qty">
-                  <button data-cart-update="${item.productId}" data-qty="${item.quantity - 1}">-</button>
+                  <button data-cart-update="${item.productId}" data-qty="${item.quantity - 1}" aria-label="Decrease quantity">-</button>
                   <span>${item.quantity}</span>
-                  <button data-cart-update="${item.productId}" data-qty="${item.quantity + 1}">+</button>
+                  <button data-cart-update="${item.productId}" data-qty="${item.quantity + 1}" aria-label="Increase quantity">+</button>
                 </div>
                 <button class="button secondary" data-cart-remove="${item.productId}" style="margin-top:10px;">Remove</button>
               </div>
@@ -486,12 +493,12 @@
             </div>
           `).join('')}
         </div>
-        <aside class="summary-card">
+        <aside class="summary-card checkout-card">
           <h2>Order summary</h2>
           <div class="summary-line"><span>Subtotal</span><strong>${money(subtotal)}</strong></div>
           <div class="summary-line"><span>Delivery</span><strong>Digital</strong></div>
           <p class="meta">Your ebooks are made available through your account after confirmed payment.</p>
-          <label for="delivery-email" class="meta">Access email</label>
+          <label for="delivery-email" class="meta access-email-label">Access email</label>
           <input id="delivery-email" class="input" type="email" value="${currentUser ? currentUser.email : ''}" placeholder="you@example.com">
           <button id="checkout-button" class="button gold" style="width:100%; margin-top:14px;">Pay with Paystack</button>
           <button id="clear-cart-button" class="button secondary" style="width:100%; margin-top:10px;">Clear cart</button>
