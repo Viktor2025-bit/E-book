@@ -98,6 +98,16 @@
     }
   };
 
+  const pulseCartCount = () => {
+    if (reduceMotion) return;
+    document.querySelectorAll('[data-cart-count]').forEach((node) => {
+      node.classList.remove('is-pulsing');
+      void node.offsetWidth;
+      node.classList.add('is-pulsing');
+      window.setTimeout(() => node.classList.remove('is-pulsing'), 700);
+    });
+  };
+
   const animateProductCard = (trigger) => {
     const card = trigger && trigger.closest ? trigger.closest('.bems-product-card') : null;
     if (!card) return;
@@ -208,6 +218,7 @@
         try {
           await endpoints.add(button.dataset.add, 1);
           await updateCartCount();
+          pulseCartCount();
           button.innerHTML = icons.check;
           setTimeout(() => {
             button.innerHTML = oldText;

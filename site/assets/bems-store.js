@@ -182,6 +182,15 @@
       el.classList.toggle('is-empty', count === 0);
     });
   };
+  const pulseCartCount = () => {
+    if (reduceMotion) return;
+    document.querySelectorAll('[data-cart-count]').forEach((el) => {
+      el.classList.remove('is-pulsing');
+      void el.offsetWidth;
+      el.classList.add('is-pulsing');
+      window.setTimeout(() => el.classList.remove('is-pulsing'), 700);
+    });
+  };
 
   const renderHeaderActions = () => {
     document.querySelectorAll('.nav-actions').forEach((actions) => {
@@ -383,6 +392,7 @@
         try {
           const cart = await api.add(button.dataset.add, 1);
           updateCartCount(cart);
+          pulseCartCount();
           button.textContent = compact ? 'OK' : 'Added';
           setTimeout(() => {
             if (compact) button.innerHTML = label;

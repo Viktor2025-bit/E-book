@@ -187,6 +187,11 @@ button, input, textarea, select { font: inherit; }
   background: var(--ink);
   font-size: 11px;
 }
+.nav-count.is-pulsing,
+.cart-count.is-pulsing,
+[data-cart-count].is-pulsing {
+  animation: cartBadgePulse .62s ease both;
+}
 
 .container {
   max-width: 1240px;
@@ -256,11 +261,16 @@ h3 { font-size: 20px; }
   color: #fff;
   font-weight: 800;
   cursor: pointer;
+  transition: background .22s ease, border-color .22s ease, color .22s ease, transform .22s ease, box-shadow .22s ease;
+}
+.button:hover {
+  box-shadow: 0 12px 24px rgba(17,24,31,.12);
+  transform: translateY(-2px);
 }
 .button.secondary { background: transparent; color: var(--ink); }
 .button.gold { background: var(--gold); border-color: var(--gold); }
 .button.light { background: #f8faf7; border-color: #f8faf7; color: var(--ink); }
-.button:disabled { opacity: .6; cursor: not-allowed; }
+.button:disabled { opacity: .6; cursor: not-allowed; box-shadow: none; transform: none; }
 
 .bookzen-hero {
   min-height: calc(100vh - 74px);
@@ -418,6 +428,18 @@ h3 { font-size: 20px; }
   font-weight: 800;
   text-align: center;
   box-shadow: 0 10px 24px rgba(17,24,31,.05);
+  animation: cardFadeUp .62s ease both;
+  transition: border-color .22s ease, box-shadow .22s ease, transform .22s ease;
+}
+.category-row a:nth-child(2) { animation-delay: .05s; }
+.category-row a:nth-child(3) { animation-delay: .1s; }
+.category-row a:nth-child(4) { animation-delay: .15s; }
+.category-row a:nth-child(5) { animation-delay: .2s; }
+.category-row a:nth-child(6) { animation-delay: .25s; }
+.category-row a:hover {
+  border-color: rgba(173,123,44,.32);
+  box-shadow: 0 16px 32px rgba(17,24,31,.08);
+  transform: translateY(-4px);
 }
 .home-assurance { padding-top: 0; }
 
@@ -800,6 +822,14 @@ h3 { font-size: 20px; }
 .product-card:nth-child(2) { animation-delay: .06s; }
 .product-card:nth-child(3) { animation-delay: .12s; }
 .product-card:nth-child(4) { animation-delay: .18s; }
+.product-card:nth-child(5) { animation-delay: .24s; }
+.product-card:nth-child(6) { animation-delay: .3s; }
+.product-card:nth-child(7) { animation-delay: .36s; }
+.product-card:nth-child(8) { animation-delay: .42s; }
+.product-card:nth-child(9) { animation-delay: .48s; }
+.product-card:nth-child(10) { animation-delay: .54s; }
+.product-card:nth-child(11) { animation-delay: .6s; }
+.product-card:nth-child(12) { animation-delay: .66s; }
 
 @keyframes actionButtonPop {
   0% {
@@ -834,6 +864,21 @@ h3 { font-size: 20px; }
   100% {
     opacity: 0;
     transform: scale(1.35);
+  }
+}
+
+@keyframes cartBadgePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(173,123,44,.34);
+    scale: 1;
+  }
+  45% {
+    box-shadow: 0 0 0 10px rgba(173,123,44,0);
+    scale: 1.22;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(173,123,44,0);
+    scale: 1;
   }
 }
 

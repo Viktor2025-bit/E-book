@@ -190,6 +190,10 @@ body.bems-booken-home {
   top: -8px;
 }
 
+.bems-count.is-pulsing {
+  animation: bemsCartBadgePulse 620ms ease both;
+}
+
 .bems-search-panel {
   background: rgba(19, 39, 47, 0.98);
   color: #fff;
@@ -631,8 +635,15 @@ body.bems-booken-home {
   padding: 24px 20px 20px;
   position: relative;
   text-decoration: none;
+  animation: bemsCardFadeUp 620ms ease both;
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
+
+.bems-category-card:nth-child(2) { animation-delay: 50ms; }
+.bems-category-card:nth-child(3) { animation-delay: 100ms; }
+.bems-category-card:nth-child(4) { animation-delay: 150ms; }
+.bems-category-card:nth-child(5) { animation-delay: 200ms; }
+.bems-category-card:nth-child(6) { animation-delay: 250ms; }
 
 .bems-category-card::before {
   background: var(--cat-accent);
@@ -793,8 +804,17 @@ body.bems-booken-home {
   min-height: 545px;
   overflow: hidden;
   position: relative;
+  animation: bemsCardFadeUp 650ms ease both;
   transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
 }
+
+.bems-product-card:nth-child(2) { animation-delay: 60ms; }
+.bems-product-card:nth-child(3) { animation-delay: 120ms; }
+.bems-product-card:nth-child(4) { animation-delay: 180ms; }
+.bems-product-card:nth-child(5) { animation-delay: 240ms; }
+.bems-product-card:nth-child(6) { animation-delay: 300ms; }
+.bems-product-card:nth-child(7) { animation-delay: 360ms; }
+.bems-product-card:nth-child(8) { animation-delay: 420ms; }
 
 .bems-product-card::after {
   background: radial-gradient(circle at center, rgba(19, 39, 47, 0.24), transparent 58%);
@@ -1292,6 +1312,32 @@ body.bems-booken-home {
   100% {
     opacity: 0;
     transform: scale(1.35);
+  }
+}
+
+@keyframes bemsCartBadgePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(189, 132, 43, 0.34);
+    scale: 1;
+  }
+  45% {
+    box-shadow: 0 0 0 10px rgba(189, 132, 43, 0);
+    scale: 1.22;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(189, 132, 43, 0);
+    scale: 1;
+  }
+}
+
+@keyframes bemsCardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
