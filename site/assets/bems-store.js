@@ -388,34 +388,75 @@
     const category = byId('category-filter');
     const sort = byId('sort-filter');
     const title = byId('collection-title');
+    const resultCount = byId('catalog-result-count');
+    const clearFilters = byId('clear-filters');
+    const params = new URLSearchParams(window.location.search);
 
     allProducts = await api.products();
     const categories = [...new Set(allProducts.map((p) => p.category).filter(Boolean))].sort();
-    category.innerHTML = '<option value="">All categories</option>' + categories.map((c) => `<option>${c}</option>`).join('');
+    category.innerHTML = '<option value="">All categories</option>' + categories.map((c) => `<option value="${c}">${c}</option>`).join('');
 
-    const render = () => {
+    if (params.get('q')) search.value = params.get('q');
+    if (params.get('category')) category.value = params.get('category');
+    if (params.get('sort')) sort.value = params.get('sort');
+
+    const syncUrl = () => {
+      const nextParams = new URLSearchParams();
+      if (search.value.trim()) nextParams.set('q', search.value.trim());
+      if (category.value) nextParams.set('category', category.value);
+      if (sort.value) nextParams.set('sort', sort.value);
+      const query = nextParams.toString();
+      const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}`;
+      window.history.replaceState({}, '', nextUrl);
+    };
+
+    const render = (updateUrl = true) => {
       const q = search.value.trim().toLowerCase();
+      const selectedCategory = category.value;
       let products = allProducts.filter((p) => {
-        const haystack = `${p.title} ${p.author || ''} ${p.category || ''} ${p.description || ''}`.toLowerCase();
-        return (!q || haystack.includes(q)) && (!category.value || p.category === category.value);
+        const haystack = [
+          p.title,
+          p.author,
+          p.category,
+          p.format,
+          p.pages,
+          p.description,
+          p.accessNote,
+        ].filter(Boolean).join(' ').toLowerCase();
+        return (!q || haystack.includes(q)) && (!selectedCategory || p.category === selectedCategory);
       });
 
       if (sort.value === 'price-asc') products = products.sort((a, b) => Number(a.price) - Number(b.price));
       if (sort.value === 'price-desc') products = products.sort((a, b) => Number(b.price) - Number(a.price));
       if (sort.value === 'title') products = products.sort((a, b) => a.title.localeCompare(b.title));
 
-      title.textContent = q ? `Search results for "${search.value.trim()}"` : 'Browse ebooks';
+      if (q && selectedCategory) title.textContent = `Search results for "${search.value.trim()}" in ${selectedCategory}`;
+      else if (q) title.textContent = `Search results for "${search.value.trim()}"`;
+      else if (selectedCategory) title.textContent = `${selectedCategory} ebooks`;
+      else title.textContent = 'Browse ebooks';
+
+      if (resultCount) {
+        const activeFilters = [q ? 'search' : '', selectedCategory ? 'category' : '', sort.value ? 'sort' : ''].filter(Boolean).length;
+        resultCount.textContent = `${products.length} ebook${products.length === 1 ? '' : 's'} found${activeFilters ? ` across ${activeFilters} active filter${activeFilters === 1 ? '' : 's'}` : ''}.`;
+      }
+      if (clearFilters) {
+        clearFilters.classList.toggle('hidden', !(q || selectedCategory || sort.value));
+      }
+
       grid.innerHTML = products.length
         ? products.map(productCard).join('')
         : '<p class="notice">No ebooks matched your search. Try another title, author, or category.</p>';
       bindAddButtons();
       bindLoveButtons();
+      if (updateUrl) syncUrl();
     };
 
-    [search, category, sort].forEach((el) => el.addEventListener('input', render));
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('q')) search.value = params.get('q');
-    render();
+    search.addEventListener('input', render);
+    [category, sort].forEach((el) => {
+      el.addEventListener('input', render);
+      el.addEventListener('change', render);
+    });
+    render(false);
   };
 
   const initProduct = async () => {

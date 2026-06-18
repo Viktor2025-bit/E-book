@@ -300,19 +300,41 @@
       });
     }
 
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const query = new FormData(form).get('q').toString().trim().toLowerCase();
+    const renderSuggestions = () => {
+      const query = new FormData(form).get('q').toString().trim();
       if (!query) {
         results.innerHTML = '';
         return;
       }
+      const normalizedQuery = query.toLowerCase();
       const matches = products.filter((product) => (
-        [product.title, product.author, product.category].join(' ').toLowerCase().includes(query)
+        [
+          product.title,
+          product.author,
+          product.category,
+          product.format,
+          product.description,
+        ].filter(Boolean).join(' ').toLowerCase().includes(normalizedQuery)
       )).slice(0, 8);
       results.innerHTML = matches.length
-        ? matches.map((product) => `<a href="/products/${escapeHtml(product.handle)}.html">${escapeHtml(product.title)}<br><small>${money(product.price)}</small></a>`).join('')
-        : '<p>No matching ebooks found.</p>';
+        ? `
+          <p>${matches.length} quick match${matches.length === 1 ? '' : 'es'}</p>
+          ${matches.map((product) => `<a href="/products/${escapeHtml(product.handle)}.html">${escapeHtml(product.title)}<br><small>${escapeHtml(product.category || 'Ebook')} - ${money(product.price)}</small></a>`).join('')}
+          <a href="/collections/all.html?q=${encodeURIComponent(query)}">View all catalog results</a>
+        `
+        : `<p>No quick matches found. <a href="/collections/all.html?q=${encodeURIComponent(query)}">Search the full catalog</a></p>`;
+    };
+
+    form.addEventListener('input', renderSuggestions);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const query = new FormData(form).get('q').toString().trim();
+      if (!query) {
+        results.innerHTML = '';
+        return;
+      }
+      window.location.href = `/collections/all.html?q=${encodeURIComponent(query)}`;
     });
   };
 

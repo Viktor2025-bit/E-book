@@ -43,17 +43,36 @@ exports.getProductByHandle = async (req, res) => {
 
 exports.searchProducts = async (req, res) => {
   try {
-    const { q } = req.query;
+    const { q = '', category = '', sort = '' } = req.query;
+    const query = q.trim();
+    const where = {
+      handle: { [Op.in]: BEMS_CATALOG_HANDLES },
+    };
+
+    if (category.trim()) {
+      where.category = { [Op.iLike]: category.trim() };
+    }
+
+    if (query) {
+      where[Op.or] = [
+        { title: { [Op.iLike]: `%${query}%` } },
+        { author: { [Op.iLike]: `%${query}%` } },
+        { category: { [Op.iLike]: `%${query}%` } },
+        { format: { [Op.iLike]: `%${query}%` } },
+        { accessNote: { [Op.iLike]: `%${query}%` } },
+        { description: { [Op.iLike]: `%${query}%` } },
+      ];
+    }
+
+    const sortOrder = {
+      title: [['title', 'ASC']],
+      'price-asc': [['price', 'ASC']],
+      'price-desc': [['price', 'DESC']],
+    };
+
     const products = await Product.findAll({
-      where: {
-        handle: { [Op.in]: BEMS_CATALOG_HANDLES },
-        [Op.or]: [
-          { title: { [Op.iLike]: `%${q || ''}%` } },
-          { author: { [Op.iLike]: `%${q || ''}%` } },
-          { category: { [Op.iLike]: `%${q || ''}%` } },
-          { description: { [Op.iLike]: `%${q || ''}%` } },
-        ],
-      }
+      where,
+      order: sortOrder[sort] || [['createdAt', 'DESC']],
     });
     res.json(products);
   } catch (error) {
