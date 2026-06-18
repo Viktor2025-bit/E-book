@@ -960,6 +960,42 @@ h3 { font-size: 20px; }
   color: var(--ink);
   font-weight: 800;
 }
+.checkout-primary {
+  width: 100%;
+  min-height: 62px;
+  margin-top: 16px;
+  display: grid;
+  gap: 3px;
+  place-items: center;
+  border: 1px solid #173f3a;
+  background: linear-gradient(135deg, #10282f 0%, #173f3a 100%);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(16,40,47,.18);
+}
+.checkout-primary:hover {
+  background: linear-gradient(135deg, #173f3a 0%, #10282f 100%);
+  color: #fff;
+}
+.checkout-primary span {
+  font-size: 16px;
+  font-weight: 800;
+}
+.checkout-primary small {
+  color: rgba(255,255,255,.68);
+  font-size: 12px;
+  font-weight: 600;
+}
+.checkout-secondary {
+  width: 100%;
+  margin-top: 10px;
+  border-color: rgba(23,63,58,.22);
+  color: var(--ink);
+  background: #fff;
+}
+.checkout-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
 .empty-cart-card {
   max-width: 680px;
   margin: 0 auto;
