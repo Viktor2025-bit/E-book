@@ -85,6 +85,34 @@ app.get('/login.html', (req, res) => {
   res.redirect('/account/login.html');
 });
 
+const redirectLegacyMirrorPage = (req, res, next) => {
+  const requestedPath = req.path.toLowerCase();
+
+  if (
+    requestedPath === '/cdn.html' ||
+    requestedPath === '/account/login4236.html' ||
+    requestedPath.startsWith('/blogs/')
+  ) {
+    return res.redirect('/collections/all.html');
+  }
+
+  if (
+    requestedPath === '/pages/team.html' ||
+    requestedPath === '/pages/wishlist.html'
+  ) {
+    return res.redirect('/collections/all.html');
+  }
+
+  const isLegacyCollection =
+    requestedPath.startsWith('/collections/') &&
+    requestedPath !== '/collections/all.html' &&
+    requestedPath !== '/collections/all';
+
+  if (isLegacyCollection) return res.redirect('/collections/all.html');
+
+  next();
+};
+
 app.get([
   '/pages/wishlist.html',
   '/pages/team.html',
@@ -102,6 +130,8 @@ app.get([
 ], (req, res) => {
   res.redirect('/collections/all.html');
 });
+
+app.use(redirectLegacyMirrorPage);
 
 app.use(express.static(SITE_DIR));
 
