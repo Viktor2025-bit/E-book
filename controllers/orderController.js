@@ -1,11 +1,21 @@
 const { Order, OrderItem, Cart, CartItem, Product, sequelize } = require('../models');
 const axios = require('axios');
 
+const toOrderResponse = (order) => {
+  if (!order) return order;
+  const json = order.toJSON ? order.toJSON() : order;
+  return {
+    ...json,
+    accessEmail: json.shippingAddress
+  };
+};
+
 exports.createOrder = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
     const userId = req.user.id;
     const { contactEmail, paymentMethod, reference } = req.body;
+    const accessEmail = contactEmail || req.user.email;
 
     if (!reference) {
       await transaction.rollback();
@@ -68,7 +78,7 @@ exports.createOrder = async (req, res) => {
     const order = await Order.create({
       userId,
       totalAmount,
-      shippingAddress: contactEmail || req.user.email,
+      shippingAddress: accessEmail,
       paymentMethod: paymentMethod || 'Paystack',
       status: 'Paid'
     }, { transaction });
@@ -96,7 +106,7 @@ exports.createOrder = async (req, res) => {
       }]
     });
 
-    res.status(201).json(completedOrder);
+    res.status(201).json(toOrderResponse(completedOrder));
   } catch (error) {
     await transaction.rollback();
     res.status(500).json({ error: error.message });
@@ -115,7 +125,7 @@ exports.getOrders = async (req, res) => {
       }],
       order: [['createdAt', 'DESC']]
     });
-    res.json(orders);
+    res.json(orders.map(toOrderResponse));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -139,7 +149,7 @@ exports.getOrderById = async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    res.json(order);
+    res.json(toOrderResponse(order));
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

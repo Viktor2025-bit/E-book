@@ -905,6 +905,18 @@ h3 { font-size: 20px; }
   margin: 0 auto;
   text-align: center;
 }
+.order-success-card {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.order-success-card .access-panel {
+  text-align: left;
+  margin: 24px auto;
+}
+.order-success-card .hero-actions {
+  justify-content: center;
+}
 .account-layout {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
