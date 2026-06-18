@@ -829,7 +829,7 @@ body.bems-booken-home {
   display: flex;
   justify-content: center;
   min-height: 370px;
-  padding: 28px 24px 18px;
+  padding: 22px 20px 16px;
   position: relative;
 }
 
@@ -843,7 +843,7 @@ body.bems-booken-home {
   justify-content: center;
   overflow: hidden;
   padding: 0;
-  width: min(86%, 270px);
+  width: min(92%, 292px);
 }
 
 .bems-product-image img {
@@ -1599,8 +1599,8 @@ body.bems-booken-home {
 
   .bems-product-image {
     height: auto;
-    max-width: 250px;
-    width: 86%;
+    max-width: 278px;
+    width: 90%;
   }
 
   .bems-card-actions {
@@ -1628,6 +1628,6 @@ body.bems-booken-home {
   }
 
   .bems-product-image {
-    width: 88%;
+    width: 92%;
   }
 }

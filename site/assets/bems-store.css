@@ -607,7 +607,7 @@ h3 { font-size: 20px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px 26px 18px;
+  padding: 22px 20px 16px;
   overflow: hidden;
 }
 .sale-badge {
@@ -631,7 +631,7 @@ h3 { font-size: 20px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(86%, 270px);
+  width: min(92%, 292px);
   height: auto;
   padding: 0;
   background: #fff;
