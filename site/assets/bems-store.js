@@ -45,6 +45,12 @@
       });
     },
     paystackConfig() { return this.request('/api/orders/paystack-config'); },
+    initializeCheckout(contactEmail) {
+      return this.request('/api/orders/initialize', {
+        method: 'POST',
+        body: JSON.stringify({ contactEmail }),
+      });
+    },
     checkout(contactEmail, reference) {
       return this.request('/api/orders', {
         method: 'POST',
@@ -364,6 +370,25 @@
     document.querySelectorAll('[data-cart-count]').forEach((el) => { el.textContent = count; });
   };
 
+  const renderOrderSuccess = (order, orderEmail) => {
+    byId('cart-root').innerHTML = `
+      <div class="summary-card order-success-card">
+        <p class="eyebrow">Payment confirmed</p>
+        <h1>Order placed successfully</h1>
+        <p class="lead">Thank you for buying from BEMS Books. Order #${order.id.slice(0, 8)} has been recorded and your ebook access will be sent to ${orderEmail}.</p>
+        <div class="access-panel">
+          <strong>What happens next</strong>
+          <span>Your order is saved to your BEMS Books account. Ebook access will be connected to your account and the email used at checkout.</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button gold" href="/account/index.html">View account</a>
+          <a class="button secondary" href="/collections/all.html">Browse more ebooks</a>
+        </div>
+      </div>
+    `;
+    updateCartCount(null);
+  };
+
   const hydrateHeader = async () => {
     try {
       currentUser = await api.currentUser();
@@ -586,19 +611,10 @@
       await api.clearCart();
       await renderCart();
     });
-    byId('checkout-button').addEventListener('click', () => checkout(subtotal));
+    byId('checkout-button').addEventListener('click', () => checkout());
   };
 
-  const loadPaystack = () => new Promise((resolve, reject) => {
-    if (window.PaystackPop) return resolve();
-    const script = document.createElement('script');
-    script.src = 'https://js.paystack.co/v1/inline.js';
-    script.onload = resolve;
-    script.onerror = () => reject(new Error('Could not load Paystack. Check your connection and try again.'));
-    document.head.appendChild(script);
-  });
-
-  const checkout = async (subtotal) => {
+  const checkout = async () => {
     const message = byId('checkout-message');
     if (!currentUser) {
       window.location.href = '/account/login.html?next=/cart.html';
@@ -612,57 +628,63 @@
     }
 
     try {
-      const config = await api.paystackConfig();
-      if (!config || !config.publicKey) {
-        show(message, 'Paystack is not configured yet. Add PAYSTACK_PUBLIC_KEY and PAYSTACK_SECRET_KEY to enable live checkout.', 'error');
-        return;
+      const button = byId('checkout-button');
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Starting secure checkout...';
       }
-      await loadPaystack();
-      if (!window.PaystackPop || typeof window.PaystackPop.setup !== 'function') {
-        show(message, 'Paystack could not be started. Refresh the page and try again.', 'error');
-        return;
-      }
-      const completePayment = async (response) => {
-        try {
-          const order = await api.checkout(contactEmail, response.reference);
-          const orderEmail = order.accessEmail || contactEmail;
-          await api.clearCart().catch(() => {});
-          byId('cart-root').innerHTML = `
-            <div class="summary-card order-success-card">
-              <p class="eyebrow">Payment confirmed</p>
-              <h1>Order placed successfully</h1>
-              <p class="lead">Thank you for buying from BEMS Books. Order #${order.id.slice(0, 8)} has been recorded and your ebook access will be sent to ${orderEmail}.</p>
-              <div class="access-panel">
-                <strong>What happens next</strong>
-                <span>Your order is saved to your BEMS Books account. Ebook access will be connected to your account and the email used at checkout.</span>
-              </div>
-              <div class="hero-actions">
-                <a class="button gold" href="/account/index.html">View account</a>
-                <a class="button secondary" href="/collections/all.html">Browse more ebooks</a>
-              </div>
-            </div>
-          `;
-          updateCartCount(null);
-        } catch (error) {
-          show(message, error.message || 'Payment was received, but the order could not be verified. Please contact BEMS Books with your Paystack reference.', 'error');
+      const transaction = await api.initializeCheckout(contactEmail);
+      if (!transaction || !transaction.authorizationUrl) {
+        show(message, 'Paystack could not create a checkout link. Please try again.', 'error');
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Secure checkout';
         }
-      };
-      const handler = window.PaystackPop.setup({
-        key: config.publicKey,
-        email: contactEmail,
-        amount: Math.round(subtotal * 100),
-        currency: 'NGN',
-        callback: function (response) {
-          completePayment(response);
-        },
-        onClose: function () {
-          show(message, 'Payment window closed before completion.', 'error');
-        },
-      });
-      handler.openIframe();
+        return;
+      }
+      window.localStorage.setItem('bems-checkout-email', contactEmail);
+      window.location.href = transaction.authorizationUrl;
     } catch (error) {
       show(message, error.message, 'error');
+      const button = byId('checkout-button');
+      if (button) {
+        button.disabled = false;
+        button.textContent = 'Secure checkout';
+      }
     }
+  };
+
+  const handlePaystackReturn = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get('reference') || params.get('trxref') || params.get('paystack_reference');
+    if (!reference) return false;
+
+    const cartRoot = byId('cart-root');
+    if (!cartRoot) return false;
+    if (!currentUser) {
+      window.location.href = `/account/login.html?next=${encodeURIComponent(`/cart.html?reference=${reference}`)}`;
+      return true;
+    }
+
+    cartRoot.innerHTML = '<p class="notice">Confirming your payment...</p>';
+    try {
+      const storedEmail = window.localStorage.getItem('bems-checkout-email');
+      const order = await api.checkout(storedEmail || currentUser.email, reference);
+      const orderEmail = order.accessEmail || storedEmail || currentUser.email;
+      window.localStorage.removeItem('bems-checkout-email');
+      window.history.replaceState({}, document.title, '/cart.html');
+      renderOrderSuccess(order, orderEmail);
+    } catch (error) {
+      cartRoot.innerHTML = `
+        <div class="summary-card empty-cart-card">
+          <h2>Payment needs attention</h2>
+          <p class="lead">${escapeHtml(error.message || 'We could not verify this payment. Please contact BEMS Books with your Paystack reference.')}</p>
+          <p class="meta">Reference: ${escapeHtml(reference)}</p>
+          <a class="button gold" href="/cart.html">Return to cart</a>
+        </div>
+      `;
+    }
+    return true;
   };
 
   const initAccount = async () => {
@@ -784,7 +806,10 @@
       }
       if (page === 'collection') await initCollection();
       if (page === 'product') await initProduct();
-      if (page === 'cart') await renderCart();
+      if (page === 'cart') {
+        const handledReturn = await handlePaystackReturn();
+        if (!handledReturn) await renderCart();
+      }
       if (page === 'auth') initAuth();
       if (page === 'account') await initAccount();
       if (page === 'contact') initContact();

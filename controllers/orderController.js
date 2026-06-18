@@ -10,6 +10,74 @@ const toOrderResponse = (order) => {
   };
 };
 
+const getUserCart = (userId) => Cart.findOne({
+  where: { userId },
+  include: [{
+    model: CartItem,
+    as: 'items',
+    include: [{ model: Product, as: 'product' }]
+  }]
+});
+
+const getCartTotal = (cart) => cart.items.reduce((sum, item) => {
+  const price = parseFloat(item.product.price);
+  return sum + (price * item.quantity);
+}, 0);
+
+exports.initializePayment = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { contactEmail } = req.body;
+    const accessEmail = contactEmail || req.user.email;
+
+    if (!process.env.PAYSTACK_SECRET_KEY) {
+      return res.status(503).json({ message: 'Paystack secret key is not configured.' });
+    }
+    if (!accessEmail) {
+      return res.status(400).json({ message: 'Access email is required.' });
+    }
+
+    const cart = await getUserCart(userId);
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    const totalAmount = getCartTotal(cart);
+    const callbackUrl = `${req.protocol}://${req.get('host')}/cart.html`;
+    const paystackRes = await axios.post('https://api.paystack.co/transaction/initialize', {
+      email: accessEmail,
+      amount: Math.round(totalAmount * 100),
+      currency: 'NGN',
+      callback_url: callbackUrl,
+      metadata: {
+        userId,
+        accessEmail,
+        source: 'BEMS Books checkout'
+      }
+    }, {
+      headers: {
+        Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!paystackRes.data.status || !paystackRes.data.data.authorization_url) {
+      return res.status(400).json({ message: paystackRes.data.message || 'Could not initialize Paystack checkout.' });
+    }
+
+    res.json({
+      authorizationUrl: paystackRes.data.data.authorization_url,
+      accessCode: paystackRes.data.data.access_code,
+      reference: paystackRes.data.data.reference
+    });
+  } catch (error) {
+    const message = error.response && error.response.data && error.response.data.message
+      ? error.response.data.message
+      : error.message;
+    res.status(500).json({ message });
+  }
+};
+
 exports.createOrder = async (req, res) => {
   const transaction = await sequelize.transaction();
   try {
@@ -44,14 +112,7 @@ exports.createOrder = async (req, res) => {
     }
 
     // Find the cart
-    const cart = await Cart.findOne({
-      where: { userId },
-      include: [{
-        model: CartItem,
-        as: 'items',
-        include: [{ model: Product, as: 'product' }]
-      }]
-    });
+    const cart = await getUserCart(userId);
 
     if (!cart || !cart.items || cart.items.length === 0) {
       await transaction.rollback();

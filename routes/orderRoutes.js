@@ -9,6 +9,7 @@ router.get('/paystack-config', (req, res) => res.json({ publicKey: process.env.P
 // All other order routes require user login
 router.use(isAuthenticated);
 
+router.post('/initialize', orderController.initializePayment);
 router.post('/', orderController.createOrder);
 router.get('/', orderController.getOrders);
 router.get('/:id', orderController.getOrderById);
