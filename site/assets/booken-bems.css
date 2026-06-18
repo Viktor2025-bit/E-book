@@ -796,10 +796,31 @@ body.bems-booken-home {
   transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
 }
 
+.bems-product-card::after {
+  background: radial-gradient(circle at center, rgba(19, 39, 47, 0.24), transparent 58%);
+  content: "";
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: scale(0.72);
+  z-index: 4;
+}
+
 .bems-product-card:hover {
   border-color: rgba(19, 39, 47, 0.12);
   box-shadow: 0 18px 42px rgba(19, 39, 47, 0.12);
   transform: translateY(-4px);
+}
+
+.bems-product-card.is-clicked {
+  border-color: rgba(19, 39, 47, 0.18);
+  box-shadow: 0 22px 48px rgba(19, 39, 47, 0.16);
+  transform: translateY(-6px);
+}
+
+.bems-product-card.is-clicked::after {
+  animation: bemsCardBlackPulse 480ms ease both;
 }
 
 .bems-product-image-wrap {
@@ -808,27 +829,33 @@ body.bems-booken-home {
   display: flex;
   justify-content: center;
   min-height: 370px;
-  padding: 34px 28px 22px;
+  padding: 28px 24px 18px;
   position: relative;
 }
 
 .bems-product-image {
   align-items: center;
+  aspect-ratio: 4 / 5;
   background: #fff;
   box-shadow: 0 18px 34px rgba(19, 39, 47, 0.08);
   display: flex;
-  height: 318px;
+  height: auto;
   justify-content: center;
-  padding: 22px;
-  width: 72%;
+  overflow: hidden;
+  padding: 0;
+  width: min(86%, 270px);
 }
 
 .bems-product-image img {
   box-shadow: 10px 16px 22px rgba(19, 39, 47, 0.16);
   height: 100%;
-  max-width: 100%;
-  object-fit: contain;
+  max-width: none;
+  object-fit: cover;
   width: 100%;
+}
+
+.bems-product-card.is-clicked .bems-product-image img {
+  animation: bemsBookCoverClick 500ms ease both;
 }
 
 .bems-sale-badge {
@@ -855,9 +882,12 @@ body.bems-booken-home {
   top: 52%;
   transform: translateY(10px);
   transition: opacity 220ms ease, transform 220ms ease;
+  z-index: 5;
 }
 
-.bems-product-card:hover .bems-card-actions {
+.bems-product-card:hover .bems-card-actions,
+.bems-product-card:focus-within .bems-card-actions,
+.bems-product-card.is-clicked .bems-card-actions {
   opacity: 1;
   transform: translateY(0);
 }
@@ -875,7 +905,30 @@ body.bems-booken-home {
   justify-content: center;
   line-height: 1;
   text-decoration: none;
+  transform: scale(0.86);
+  transition: background 220ms ease, color 220ms ease, transform 220ms ease;
   width: 42px;
+}
+
+.bems-product-card:hover .bems-card-actions a,
+.bems-product-card:hover .bems-card-actions button,
+.bems-product-card:focus-within .bems-card-actions a,
+.bems-product-card:focus-within .bems-card-actions button,
+.bems-product-card.is-clicked .bems-card-actions a,
+.bems-product-card.is-clicked .bems-card-actions button {
+  animation: bemsActionButtonPop 360ms cubic-bezier(.18,.89,.32,1.28) both;
+}
+
+.bems-product-card:hover .bems-card-actions :nth-child(2),
+.bems-product-card:focus-within .bems-card-actions :nth-child(2),
+.bems-product-card.is-clicked .bems-card-actions :nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.bems-product-card:hover .bems-card-actions :nth-child(3),
+.bems-product-card:focus-within .bems-card-actions :nth-child(3),
+.bems-product-card.is-clicked .bems-card-actions :nth-child(3) {
+  animation-delay: 100ms;
 }
 
 .bems-card-actions a:hover,
@@ -883,6 +936,7 @@ body.bems-booken-home {
 .bems-card-actions button.is-saved {
   background: var(--bems-gold);
   color: #fff;
+  transform: scale(1.06);
 }
 
 .bems-action-icon {
@@ -1205,6 +1259,42 @@ body.bems-booken-home {
   }
 }
 
+@keyframes bemsActionButtonPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.7);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bemsBookCoverClick {
+  0% { transform: scale(1.01) rotate(0deg); }
+  45% { transform: scale(1.06) rotate(-1.2deg); }
+  100% { transform: scale(1.02) rotate(0deg); }
+}
+
+@keyframes bemsCardBlackPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.58);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
 @keyframes bemsPulse {
   0% {
     opacity: 0.75;
@@ -1391,7 +1481,7 @@ body.bems-booken-home {
   }
 
   .bems-product-image {
-    width: 78%;
+    width: 86%;
   }
 
   .bems-carousel-btn {
@@ -1508,9 +1598,9 @@ body.bems-booken-home {
   }
 
   .bems-product-image {
-    height: 280px;
-    max-width: 230px;
-    width: 76%;
+    height: auto;
+    max-width: 250px;
+    width: 86%;
   }
 
   .bems-card-actions {
@@ -1538,6 +1628,6 @@ body.bems-booken-home {
   }
 
   .bems-product-image {
-    width: 82%;
+    width: 88%;
   }
 }

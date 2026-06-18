@@ -93,6 +93,34 @@
     el.textContent = message;
     el.classList.remove('hidden');
   };
+  const animateProductCard = (trigger) => {
+    const card = trigger && trigger.closest ? trigger.closest('.product-card') : null;
+    if (!card) return;
+    card.classList.remove('is-clicked');
+    void card.offsetWidth;
+    card.classList.add('is-clicked');
+    window.setTimeout(() => card.classList.remove('is-clicked'), 620);
+  };
+  const bindProductCardAnimations = (root = document) => {
+    root.querySelectorAll('.product-card a[href*="/products/"]').forEach((link) => {
+      if (link.dataset.cardAnimationBound) return;
+      link.dataset.cardAnimationBound = 'true';
+      link.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        animateProductCard(link);
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, reduceMotion ? 0 : 180);
+      });
+    });
+
+    root.querySelectorAll('.product-card button').forEach((button) => {
+      if (button.dataset.cardButtonAnimationBound) return;
+      button.dataset.cardButtonAnimationBound = 'true';
+      button.addEventListener('pointerdown', () => animateProductCard(button));
+    });
+  };
 
   const productCard = (product) => `
     <article class="product-card">
@@ -324,7 +352,10 @@
       button.classList.toggle('is-loved', saved.includes(handle));
       button.setAttribute('aria-pressed', saved.includes(handle) ? 'true' : 'false');
 
+      if (button.dataset.loveBound) return;
+      button.dataset.loveBound = 'true';
       button.addEventListener('click', () => {
+        animateProductCard(button);
         const latest = getWishlist();
         const index = latest.indexOf(handle);
         if (index >= 0) latest.splice(index, 1);
@@ -341,7 +372,10 @@
 
   const bindAddButtons = () => {
     document.querySelectorAll('[data-add]').forEach((button) => {
+      if (button.dataset.addBound) return;
+      button.dataset.addBound = 'true';
       button.addEventListener('click', async () => {
+        animateProductCard(button);
         const compact = button.classList.contains('card-icon-button');
         const label = compact ? button.innerHTML : button.textContent;
         button.disabled = true;
@@ -419,6 +453,7 @@
     if (!featured) return;
     allProducts = await api.products();
     featured.innerHTML = allProducts.slice(0, 8).map(productCard).join('');
+    bindProductCardAnimations(featured);
     bindAddButtons();
     bindLoveButtons();
     initProductSlider(featured);
@@ -490,6 +525,7 @@
       grid.innerHTML = products.length
         ? products.map(productCard).join('')
         : '<p class="notice">No ebooks matched your search. Try another title, author, or category.</p>';
+      bindProductCardAnimations(grid);
       bindAddButtons();
       bindLoveButtons();
       if (updateUrl) syncUrl();

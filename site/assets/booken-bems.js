@@ -98,6 +98,36 @@
     }
   };
 
+  const animateProductCard = (trigger) => {
+    const card = trigger && trigger.closest ? trigger.closest('.bems-product-card') : null;
+    if (!card) return;
+    card.classList.remove('is-clicked');
+    void card.offsetWidth;
+    card.classList.add('is-clicked');
+    window.setTimeout(() => card.classList.remove('is-clicked'), 620);
+  };
+
+  const bindProductCardAnimations = (root) => {
+    root.querySelectorAll('.bems-product-card a[href*="/products/"]').forEach((link) => {
+      if (link.dataset.cardAnimationBound) return;
+      link.dataset.cardAnimationBound = 'true';
+      link.addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        animateProductCard(link);
+        window.setTimeout(() => {
+          window.location.href = link.href;
+        }, reduceMotion ? 0 : 180);
+      });
+    });
+
+    root.querySelectorAll('.bems-product-card button').forEach((button) => {
+      if (button.dataset.cardButtonAnimationBound) return;
+      button.dataset.cardButtonAnimationBound = 'true';
+      button.addEventListener('pointerdown', () => animateProductCard(button));
+    });
+  };
+
   const userAvatar = (user) => {
     const label = escapeHtml(user.displayName || user.email || 'Account');
     const initials = escapeHtml(user.initials || 'BB');
@@ -168,7 +198,10 @@
 
   const bindProductActions = (root) => {
     root.querySelectorAll('[data-add]').forEach((button) => {
+      if (button.dataset.addBound) return;
+      button.dataset.addBound = 'true';
       button.addEventListener('click', async () => {
+        animateProductCard(button);
         const oldText = button.innerHTML;
         button.disabled = true;
         button.innerHTML = icons.sync;
@@ -189,7 +222,10 @@
     });
 
     root.querySelectorAll('[data-love]').forEach((button) => {
+      if (button.dataset.loveBound) return;
+      button.dataset.loveBound = 'true';
       button.addEventListener('click', () => {
+        animateProductCard(button);
         const saved = getWishlist();
         const handle = button.dataset.love;
         const next = saved.includes(handle)
@@ -207,6 +243,7 @@
     try {
       products = await endpoints.products();
       track.innerHTML = products.map(cardTemplate).join('');
+      bindProductCardAnimations(track);
       bindProductActions(track);
       updateSavedButtons();
       initProductCarousel(track);

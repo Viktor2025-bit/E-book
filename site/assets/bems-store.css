@@ -577,11 +577,29 @@ h3 { font-size: 20px; }
   background: #fff;
   overflow: hidden;
   box-shadow: none;
+  position: relative;
   transition: transform .3s ease, box-shadow .3s ease;
+}
+.product-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: radial-gradient(circle at center, rgba(17, 24, 31, .24), transparent 58%);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(.72);
 }
 .product-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 22px rgba(0,0,0,.08);
+}
+.product-card.is-clicked {
+  box-shadow: 0 20px 44px rgba(17,24,31,.16);
+  transform: translateY(-5px);
+}
+.product-card.is-clicked::after {
+  animation: cardBlackPulse .48s ease both;
 }
 .product-card__thumbnail {
   position: relative;
@@ -589,7 +607,7 @@ h3 { font-size: 20px; }
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32px 38px 18px;
+  padding: 28px 26px 18px;
   overflow: hidden;
 }
 .sale-badge {
@@ -609,20 +627,21 @@ h3 { font-size: 20px; }
   line-height: 1;
 }
 .cover-wrap {
+  aspect-ratio: 4 / 5;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 330px;
+  width: min(86%, 270px);
+  height: auto;
   padding: 0;
   background: #fff;
-  overflow: visible;
+  overflow: hidden;
 }
 .cover-wrap img {
-  width: auto;
+  width: 100%;
   height: 100%;
-  max-width: 100%;
-  object-fit: contain;
+  max-width: none;
+  object-fit: cover;
   filter: none;
   transition: transform .55s ease;
 }
@@ -630,11 +649,12 @@ h3 { font-size: 20px; }
   opacity: .82;
 }
 .product-card:hover .cover-wrap img { transform: scale(1.06); }
+.product-card.is-clicked .cover-wrap img { animation: bookCoverClick .5s ease both; }
 .product-card__actions {
   position: absolute;
   left: 50%;
   bottom: 28px;
-  z-index: 2;
+  z-index: 5;
   display: flex;
   gap: 10px;
   opacity: 0;
@@ -642,25 +662,44 @@ h3 { font-size: 20px; }
   transform: translate(-50%, 8px);
   transition: opacity .25s ease, visibility .25s ease, transform .25s ease;
 }
-.product-card:hover .product-card__actions {
+.product-card:hover .product-card__actions,
+.product-card:focus-within .product-card__actions,
+.product-card.is-clicked .product-card__actions {
   opacity: 1;
   visibility: visible;
   transform: translate(-50%, 0);
 }
 .card-icon-button {
-  width: 42px;
-  height: 42px;
+  width: 43px;
+  height: 43px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid rgba(23,23,23,.18);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--ink);
-  box-shadow: 0 8px 18px rgba(23,23,23,.12);
+  border: 0;
+  border-radius: 0;
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(17,24,31,.18);
   font-size: 18px;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
+  transform: scale(.86);
+  transition: background .22s ease, color .22s ease, transform .22s ease;
+}
+.product-card:hover .card-icon-button,
+.product-card:focus-within .card-icon-button,
+.product-card.is-clicked .card-icon-button {
+  animation: actionButtonPop .36s cubic-bezier(.18,.89,.32,1.28) both;
+}
+.product-card:hover .card-icon-button:nth-child(2),
+.product-card:focus-within .card-icon-button:nth-child(2),
+.product-card.is-clicked .card-icon-button:nth-child(2) {
+  animation-delay: .05s;
+}
+.product-card:hover .card-icon-button:nth-child(3),
+.product-card:focus-within .card-icon-button:nth-child(3),
+.product-card.is-clicked .card-icon-button:nth-child(3) {
+  animation-delay: .1s;
 }
 .card-icon-button span {
   font-size: 11px;
@@ -676,17 +715,16 @@ h3 { font-size: 20px; }
   stroke-linejoin: round;
 }
 .love-button.is-loved {
-  background: #fff3f1;
-  border-color: #d96553;
-  color: #d04737;
+  background: var(--gold);
+  color: #fff;
 }
 .love-button.is-loved .card-heart-svg {
   fill: currentColor;
 }
 .card-icon-button:hover {
   background: var(--gold);
-  border-color: var(--gold);
   color: #fff;
+  transform: scale(1.06);
 }
 .card-body {
   min-height: 142px;
@@ -762,6 +800,42 @@ h3 { font-size: 20px; }
 .product-card:nth-child(2) { animation-delay: .06s; }
 .product-card:nth-child(3) { animation-delay: .12s; }
 .product-card:nth-child(4) { animation-delay: .18s; }
+
+@keyframes actionButtonPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(.7);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.06);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bookCoverClick {
+  0% { transform: scale(1.01) rotate(0deg); }
+  45% { transform: scale(1.06) rotate(-1.2deg); }
+  100% { transform: scale(1.02) rotate(0deg); }
+}
+
+@keyframes cardBlackPulse {
+  0% {
+    opacity: 0;
+    transform: scale(.58);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
 
 @keyframes cardFadeUp {
   from {
