@@ -618,37 +618,46 @@
         return;
       }
       await loadPaystack();
+      if (!window.PaystackPop || typeof window.PaystackPop.setup !== 'function') {
+        show(message, 'Paystack could not be started. Refresh the page and try again.', 'error');
+        return;
+      }
+      const completePayment = async (response) => {
+        try {
+          const order = await api.checkout(contactEmail, response.reference);
+          const orderEmail = order.accessEmail || contactEmail;
+          await api.clearCart().catch(() => {});
+          byId('cart-root').innerHTML = `
+            <div class="summary-card order-success-card">
+              <p class="eyebrow">Payment confirmed</p>
+              <h1>Order placed successfully</h1>
+              <p class="lead">Thank you for buying from BEMS Books. Order #${order.id.slice(0, 8)} has been recorded and your ebook access will be sent to ${orderEmail}.</p>
+              <div class="access-panel">
+                <strong>What happens next</strong>
+                <span>Your order is saved to your BEMS Books account. Ebook access will be connected to your account and the email used at checkout.</span>
+              </div>
+              <div class="hero-actions">
+                <a class="button gold" href="/account/index.html">View account</a>
+                <a class="button secondary" href="/collections/all.html">Browse more ebooks</a>
+              </div>
+            </div>
+          `;
+          updateCartCount(null);
+        } catch (error) {
+          show(message, error.message || 'Payment was received, but the order could not be verified. Please contact BEMS Books with your Paystack reference.', 'error');
+        }
+      };
       const handler = window.PaystackPop.setup({
         key: config.publicKey,
         email: contactEmail,
         amount: Math.round(subtotal * 100),
         currency: 'NGN',
-        callback: async (response) => {
-          try {
-            const order = await api.checkout(contactEmail, response.reference);
-            const orderEmail = order.accessEmail || contactEmail;
-            await api.clearCart().catch(() => {});
-            byId('cart-root').innerHTML = `
-              <div class="summary-card order-success-card">
-                <p class="eyebrow">Payment confirmed</p>
-                <h1>Order placed successfully</h1>
-                <p class="lead">Thank you for buying from BEMS Books. Order #${order.id.slice(0, 8)} has been recorded and your ebook access will be sent to ${orderEmail}.</p>
-                <div class="access-panel">
-                  <strong>What happens next</strong>
-                  <span>Your order is saved to your BEMS Books account. Ebook access will be connected to your account and the email used at checkout.</span>
-                </div>
-                <div class="hero-actions">
-                  <a class="button gold" href="/account/index.html">View account</a>
-                  <a class="button secondary" href="/collections/all.html">Browse more ebooks</a>
-                </div>
-              </div>
-            `;
-            updateCartCount(null);
-          } catch (error) {
-            show(message, error.message || 'Payment was received, but the order could not be verified. Please contact BEMS Books with your Paystack reference.', 'error');
-          }
+        callback: function (response) {
+          completePayment(response);
         },
-        onClose: () => show(message, 'Payment window closed before completion.', 'error'),
+        onClose: function () {
+          show(message, 'Payment window closed before completion.', 'error');
+        },
       });
       handler.openIframe();
     } catch (error) {
