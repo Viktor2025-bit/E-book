@@ -594,6 +594,35 @@ body.bems-booken-home {
   padding: 86px 0;
 }
 
+.bems-quick-trust {
+  background: linear-gradient(135deg, #12352f 0%, #25343d 56%, #a6782c 100%);
+  color: #fff;
+  padding: 26px 0;
+}
+
+.bems-quick-trust__grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bems-quick-trust__grid div {
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 20px;
+}
+
+.bems-quick-trust__grid strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.bems-quick-trust__grid span {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .bems-category-area {
   background:
     radial-gradient(circle at 12% 8%, rgba(189, 132, 43, 0.08), transparent 28%),
@@ -1129,17 +1158,19 @@ body.bems-booken-home {
 
 .bems-discount-wrap {
   align-items: center;
-  background: #fbfbfb;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 250, 247, 0.86)),
+    #fbfbfb;
   display: grid;
   gap: 30px;
   grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
-  outline: 1px dashed #e4e4e4;
+  outline: 1px dashed rgba(19, 39, 47, 0.16);
   outline-offset: -15px;
   padding: 40px 55px;
 }
 
 .bems-discount-content h3 {
-  color: #ff6162;
+  color: var(--bems-gold);
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -1174,7 +1205,7 @@ body.bems-booken-home {
 }
 
 .bems-discount-content .banner_style_2:hover {
-  background: #ff6162;
+  background: var(--bems-gold);
   color: #fff;
 }
 
@@ -1228,6 +1259,88 @@ body.bems-booken-home {
   color: var(--bems-muted);
   line-height: 1.7;
   margin: 0;
+}
+
+.bems-reader-list-area {
+  background: #fff;
+  padding: 20px 0 86px;
+}
+
+.bems-reader-list {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(19, 39, 47, 0.96), rgba(36, 60, 67, 0.94)),
+    var(--bems-ink);
+  color: #fff;
+  display: grid;
+  gap: 30px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.75fr);
+  overflow: hidden;
+  padding: 42px 46px;
+  position: relative;
+}
+
+.bems-reader-list::after {
+  background: rgba(189, 132, 43, 0.18);
+  border-radius: 999px;
+  content: "";
+  height: 180px;
+  position: absolute;
+  right: -70px;
+  top: -88px;
+  width: 180px;
+}
+
+.bems-reader-list h2 {
+  color: #fff;
+  font-size: 36px;
+  line-height: 1.18;
+  margin-bottom: 12px;
+}
+
+.bems-reader-list p {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 16px;
+  line-height: 1.75;
+  margin: 0;
+  max-width: 640px;
+}
+
+.bems-reader-form {
+  display: grid;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.bems-reader-form input {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: var(--bems-ink);
+  min-height: 54px;
+  padding: 0 18px;
+  width: 100%;
+}
+
+.bems-reader-form button {
+  background: var(--bems-gold);
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 52px;
+  transition: background 220ms ease, transform 220ms ease;
+}
+
+.bems-reader-form button:hover {
+  background: var(--bems-gold-dark);
+  transform: translateY(-2px);
+}
+
+.bems-reader-form span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  min-height: 18px;
 }
 
 .bems-footer {
@@ -1434,6 +1547,11 @@ body.bems-booken-home {
   .bems-discount-wrap {
     grid-template-columns: 1fr;
   }
+
+  .bems-quick-trust__grid,
+  .bems-reader-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1509,6 +1627,14 @@ body.bems-booken-home {
     padding: 58px 0;
   }
 
+  .bems-quick-trust__grid {
+    gap: 14px;
+  }
+
+  .bems-quick-trust__grid div {
+    padding-left: 16px;
+  }
+
   .bems-category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
@@ -1573,6 +1699,18 @@ body.bems-booken-home {
   .bems-discount-content h2 {
     font-size: 34px;
   }
+
+  .bems-reader-list-area {
+    padding: 8px 0 58px;
+  }
+
+  .bems-reader-list {
+    padding: 34px 24px;
+  }
+
+  .bems-reader-list h2 {
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 575px) {
@@ -1624,6 +1762,13 @@ body.bems-booken-home {
 
   .bems-category-grid {
     grid-template-columns: 1fr;
+  }
+
+  .bems-quick-trust__grid div {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-left: 0;
+    padding-top: 14px;
   }
 
   .bems-category-card {

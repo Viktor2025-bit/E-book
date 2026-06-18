@@ -413,10 +413,24 @@
     });
   };
 
+  const initReaderForm = () => {
+    const form = document.querySelector('[data-reader-form]');
+    if (!form) return;
+    const message = form.querySelector('[data-reader-message]');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const email = new FormData(form).get('email').toString().trim();
+      if (!email) return;
+      if (message) message.textContent = 'Thank you. BEMS Books will keep this reader list updated.';
+      form.reset();
+    });
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     initHeroSlider();
     initSearch();
     initWishlistNav();
+    initReaderForm();
     updateWishlistCount();
     updateCartCount();
     updateAccountLink();
