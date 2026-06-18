@@ -127,6 +127,42 @@ body.bems-booken-home {
   color: var(--bems-gold);
 }
 
+.bems-profile-link {
+  width: auto;
+}
+
+.bems-user-avatar {
+  align-items: center;
+  background: linear-gradient(135deg, #173f3a 0%, #bd842b 100%);
+  border: 1px solid rgba(23, 63, 58, 0.16);
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  height: 34px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  overflow: hidden;
+  width: 34px;
+}
+
+.bems-user-avatar img {
+  display: none;
+}
+
+.bems-user-avatar--image img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.bems-user-avatar--image span {
+  display: none;
+}
+
 .bems-header-svg {
   fill: none;
   height: 28px;

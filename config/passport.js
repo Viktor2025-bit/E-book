@@ -25,6 +25,7 @@ if (hasUsableGoogleCredentials()) {
     try {
       let user = await User.findOne({ where: { googleId: profile.id } });
       const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+      const avatarUrl = profile.photos && profile.photos[0] ? profile.photos[0].value : null;
 
       if (!email) {
         return done(new Error('Google did not return an email address.'), null);
@@ -38,12 +39,14 @@ if (hasUsableGoogleCredentials()) {
         await user.update({
           googleId: user.googleId || profile.id,
           displayName: user.displayName || profile.displayName,
+          avatarUrl: avatarUrl || user.avatarUrl,
         });
       } else {
         user = await User.create({
           googleId: profile.id,
           displayName: profile.displayName || 'BEMS Books Reader',
           email,
+          avatarUrl,
         });
       }
       

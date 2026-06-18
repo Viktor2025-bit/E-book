@@ -36,6 +36,17 @@ const mergeGuestCartIntoUserCart = async (sessionId, userId) => {
 
 exports.mergeGuestCartIntoUserCart = mergeGuestCartIntoUserCart;
 
+const userInitials = (user) => {
+  const name = (user.displayName || '').trim();
+  const nameParts = name.split(/\s+/).filter(Boolean);
+  if (nameParts.length >= 2) return `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase();
+  if (nameParts.length === 1 && nameParts[0].length >= 2) return nameParts[0].slice(0, 2).toUpperCase();
+
+  const localPart = (user.email || '').split('@')[0].replace(/[^a-z]/gi, '');
+  if (/^kalu.*victor/i.test(localPart)) return 'KV';
+  return (localPart.slice(0, 2) || 'BB').toUpperCase();
+};
+
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -125,5 +136,7 @@ exports.currentUser = (req, res) => {
     id: req.user.id,
     displayName: req.user.displayName,
     email: req.user.email,
+    avatarUrl: req.user.avatarUrl,
+    initials: userInitials(req.user),
   });
 };

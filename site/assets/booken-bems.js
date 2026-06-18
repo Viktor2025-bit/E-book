@@ -98,6 +98,21 @@
     }
   };
 
+  const userAvatar = (user) => {
+    const label = escapeHtml(user.displayName || user.email || 'Account');
+    const initials = escapeHtml(user.initials || 'BB');
+    if (user.avatarUrl) {
+      return `
+        <span class="bems-user-avatar bems-user-avatar--image" aria-hidden="true">
+          <img src="${escapeHtml(user.avatarUrl)}" alt="" referrerpolicy="no-referrer" onerror="this.parentElement.classList.remove('bems-user-avatar--image'); this.remove();">
+          <span>${initials}</span>
+        </span>
+        <span class="sr-only">${label}</span>
+      `;
+    }
+    return `<span class="bems-user-avatar" aria-hidden="true"><span>${initials}</span></span><span class="sr-only">${label}</span>`;
+  };
+
   const updateAccountLink = async () => {
     try {
       const result = await endpoints.user();
@@ -105,7 +120,10 @@
       if (!user || !user.id) return;
       document.querySelectorAll('[data-account-link]').forEach((link) => {
         link.href = '/account/index.html';
-        link.title = user.displayName || user.username || 'Account';
+        link.title = user.displayName || user.email || 'Account';
+        link.setAttribute('aria-label', link.title);
+        link.classList.add('bems-profile-link');
+        link.innerHTML = userAvatar(user);
       });
     } catch (_) {
       document.querySelectorAll('[data-account-link]').forEach((link) => {

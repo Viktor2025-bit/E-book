@@ -74,6 +74,13 @@
   const wishlistKey = 'bems-books-wishlist';
   const byId = (id) => document.getElementById(id);
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[char]));
   const show = (el, message, type = 'notice') => {
     if (!el) return;
     el.className = type;
@@ -114,6 +121,20 @@
     } catch (_) {
       return [];
     }
+  };
+  const userAvatar = (user) => {
+    const label = escapeHtml(user.displayName || user.email || 'Account');
+    const initials = escapeHtml(user.initials || 'BB');
+    if (user.avatarUrl) {
+      return `
+        <span class="bems-user-avatar bems-user-avatar--image" aria-hidden="true">
+          <img src="${escapeHtml(user.avatarUrl)}" alt="" referrerpolicy="no-referrer" onerror="this.parentElement.classList.remove('bems-user-avatar--image'); this.remove();">
+          <span>${initials}</span>
+        </span>
+        <span class="sr-only">${label}</span>
+      `;
+    }
+    return `<span class="bems-user-avatar" aria-hidden="true"><span>${initials}</span></span><span class="sr-only">${label}</span>`;
   };
 
   const saveWishlist = (items) => {
@@ -353,13 +374,11 @@
     document.querySelectorAll('[data-account-link]').forEach((link) => {
       if (currentUser) {
         link.href = '/account/index.html';
-        const label = currentUser.displayName || 'Account';
-        if (link.classList.contains('nav-icon-button')) {
-          link.setAttribute('aria-label', label);
-          link.setAttribute('title', label);
-        } else {
-          link.textContent = label;
-        }
+        const label = currentUser.displayName || currentUser.email || 'Account';
+        link.setAttribute('aria-label', label);
+        link.setAttribute('title', label);
+        link.classList.add('bems-profile-link');
+        link.innerHTML = userAvatar(currentUser);
       }
     });
 

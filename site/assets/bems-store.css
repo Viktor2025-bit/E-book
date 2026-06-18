@@ -90,6 +90,49 @@ button, input, textarea, select { font: inherit; }
 .nav-icon-button:hover {
   color: var(--gold);
 }
+.bems-profile-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.bems-user-avatar {
+  align-items: center;
+  background: linear-gradient(135deg, var(--green) 0%, var(--gold) 100%);
+  border: 1px solid rgba(23,63,58,.16);
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  height: 34px;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 1;
+  overflow: hidden;
+  width: 34px;
+}
+.bems-user-avatar img {
+  display: none;
+}
+.bems-user-avatar--image img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+.bems-user-avatar--image span {
+  display: none;
+}
+.sr-only {
+  border: 0;
+  clip: rect(0,0,0,0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
 .nav-icon {
   width: 24px;
   height: 24px;

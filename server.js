@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const morgan = require('morgan');
 const cors = require('cors');
+const { DataTypes } = require('sequelize');
 require('dotenv').config();
 
 const session = require('express-session');
@@ -23,6 +24,15 @@ const MIRRORED_CDN_DIR = path.join(__dirname, ['cdn', 'shopify', 'com'].join('.'
 connectDB().then(async () => {
   try {
     await sequelize.sync();
+    const queryInterface = sequelize.getQueryInterface();
+    const userTable = await queryInterface.describeTable('Users');
+    if (!userTable.avatarUrl) {
+      await queryInterface.addColumn('Users', 'avatarUrl', {
+        type: DataTypes.STRING,
+        allowNull: true,
+      });
+      console.log('Added Users.avatarUrl column');
+    }
     console.log('Database synced');
   } catch (error) {
     console.error('Database sync failed:', error.message);
