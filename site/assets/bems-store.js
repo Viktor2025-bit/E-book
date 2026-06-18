@@ -651,6 +651,12 @@
     const registerForm = byId('register-form');
     const message = byId('auth-message');
     const params = new URLSearchParams(window.location.search);
+    const googleLink = document.querySelector('.auth-google');
+    const next = params.get('next');
+
+    if (googleLink && next) {
+      googleLink.href = `/api/auth/google?next=${encodeURIComponent(next)}`;
+    }
 
     if (params.get('google') === 'not-configured') {
       show(message, 'Google login is available, but OAuth keys are not configured on this machine yet.', 'notice');

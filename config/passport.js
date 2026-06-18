@@ -3,7 +3,19 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 require('dotenv').config();
 
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+const hasUsableGoogleCredentials = () => {
+  const clientId = process.env.GOOGLE_CLIENT_ID || '';
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
+  const placeholders = ['your_google_client_id_here', 'your_google_client_secret_here'];
+
+  return Boolean(clientId && clientSecret)
+    && !placeholders.includes(clientId)
+    && !placeholders.includes(clientSecret)
+    && !clientId.toLowerCase().includes('placeholder')
+    && !clientSecret.toLowerCase().includes('placeholder');
+};
+
+if (hasUsableGoogleCredentials()) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -12,13 +24,26 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
   async (accessToken, refreshToken, profile, done) => {
     try {
       let user = await User.findOne({ where: { googleId: profile.id } });
+      const email = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+
+      if (!email) {
+        return done(new Error('Google did not return an email address.'), null);
+      }
       
       if (!user) {
-        // Create user if they don't exist
+        user = await User.findOne({ where: { email } });
+      }
+
+      if (user) {
+        await user.update({
+          googleId: user.googleId || profile.id,
+          displayName: user.displayName || profile.displayName,
+        });
+      } else {
         user = await User.create({
           googleId: profile.id,
-          displayName: profile.displayName,
-          email: profile.emails[0].value,
+          displayName: profile.displayName || 'BEMS Books Reader',
+          email,
         });
       }
       

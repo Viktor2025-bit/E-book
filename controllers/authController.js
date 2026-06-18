@@ -34,6 +34,8 @@ const mergeGuestCartIntoUserCart = async (sessionId, userId) => {
   await guestCart.destroy();
 };
 
+exports.mergeGuestCartIntoUserCart = mergeGuestCartIntoUserCart;
+
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
