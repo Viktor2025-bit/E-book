@@ -905,6 +905,39 @@ h3 { font-size: 20px; }
   margin: 0 auto;
   text-align: center;
 }
+.account-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+.account-profile {
+  position: sticky;
+  top: 94px;
+}
+.account-order {
+  display: grid;
+  gap: 12px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.account-order ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.account-order li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--ink);
+}
+.account-order li span {
+  color: var(--muted);
+  font-weight: 800;
+}
 
 .auth-wrap {
   min-height: calc(100vh - 74px);
@@ -1140,6 +1173,8 @@ h3 { font-size: 20px; }
   .toolbar { grid-template-columns: 1fr; }
   .auth-wrap { padding: 34px 16px; }
   .auth-shell { grid-template-columns: 1fr; }
+  .account-layout { grid-template-columns: 1fr; }
+  .account-profile { position: static; }
   .auth-visual {
     min-height: 360px;
     padding: 34px;

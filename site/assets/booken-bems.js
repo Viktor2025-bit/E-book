@@ -101,10 +101,11 @@
   const updateAccountLink = async () => {
     try {
       const result = await endpoints.user();
-      if (!result || !result.user) return;
+      const user = result && (result.user || result);
+      if (!user || !user.id) return;
       document.querySelectorAll('[data-account-link]').forEach((link) => {
         link.href = '/account/index.html';
-        link.title = result.user.username || 'Account';
+        link.title = user.displayName || user.username || 'Account';
       });
     } catch (_) {
       document.querySelectorAll('[data-account-link]').forEach((link) => {

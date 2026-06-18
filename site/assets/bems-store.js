@@ -51,6 +51,7 @@
         body: JSON.stringify({ contactEmail, reference, paymentMethod: 'Paystack' }),
       });
     },
+    orders() { return this.request('/api/orders'); },
   };
 
   let currentUser = null;
@@ -351,8 +352,8 @@
 
     document.querySelectorAll('[data-account-link]').forEach((link) => {
       if (currentUser) {
-        link.href = '/api/auth/logout';
-        const label = currentUser.displayName ? `Logout (${currentUser.displayName})` : 'Logout';
+        link.href = '/account/index.html';
+        const label = currentUser.displayName || 'Account';
         if (link.classList.contains('nav-icon-button')) {
           link.setAttribute('aria-label', label);
           link.setAttribute('title', label);
@@ -583,6 +584,56 @@
     }
   };
 
+  const initAccount = async () => {
+    const root = byId('account-root');
+    if (!root) return;
+
+    if (!currentUser) {
+      window.location.href = '/account/login.html?next=/account/index.html';
+      return;
+    }
+
+    try {
+      const orders = await api.orders();
+      root.innerHTML = `
+        <div class="account-layout">
+          <aside class="summary-card account-profile">
+            <p class="eyebrow">Signed in</p>
+            <h2>${currentUser.displayName || 'BEMS Reader'}</h2>
+            <p class="meta">${currentUser.email}</p>
+            <a class="button secondary" href="/api/auth/logout" style="width:100%; margin-top:18px;">Logout</a>
+          </aside>
+          <section class="cart-list-card">
+            <div class="cart-list-heading">
+              <h2>Order history</h2>
+              <span>${orders.length} order${orders.length === 1 ? '' : 's'}</span>
+            </div>
+            ${orders.length ? orders.map((order) => `
+              <article class="account-order">
+                <div>
+                  <strong>Order #${String(order.id).slice(0, 8)}</strong>
+                  <p class="meta">${new Date(order.createdAt).toLocaleDateString()} - ${order.status || 'Paid'} - ${money(order.totalAmount)}</p>
+                </div>
+                <ul>
+                  ${(order.items || []).map((item) => `<li>${item.product ? item.product.title : 'Ebook'} <span>x${item.quantity}</span></li>`).join('')}
+                </ul>
+                <p class="meta">Access is connected to your BEMS Books account and order email.</p>
+              </article>
+            `).join('') : `
+              <div class="empty-cart-card">
+                <h3>No ebook orders yet</h3>
+                <p class="lead">After a successful Paystack payment, your ebook order will appear here.</p>
+                <a class="button gold" href="/collections/all.html">Browse ebooks</a>
+              </div>
+            `}
+          </section>
+        </div>
+      `;
+    } catch (error) {
+      show(root, error.message || 'Could not load account orders.', 'error');
+    }
+  };
+
   const initAuth = () => {
     const loginForm = byId('login-form');
     const registerForm = byId('register-form');
@@ -632,8 +683,9 @@
       if (page === 'product') await initProduct();
       if (page === 'cart') await renderCart();
       if (page === 'auth') initAuth();
+      if (page === 'account') await initAccount();
     } catch (error) {
-      const target = byId('page-message') || byId('product-grid') || byId('featured-products') || byId('cart-root');
+      const target = byId('page-message') || byId('product-grid') || byId('featured-products') || byId('cart-root') || byId('account-root');
       show(target, error.message, 'error');
     }
   });

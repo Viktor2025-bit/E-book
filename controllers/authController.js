@@ -1,9 +1,43 @@
-const User = require('../models/User');
+const { User, Cart, CartItem } = require('../models');
 const bcrypt = require('bcryptjs');
+
+const mergeGuestCartIntoUserCart = async (sessionId, userId) => {
+  if (!sessionId || !userId) return;
+
+  const guestCart = await Cart.findOne({
+    where: { sessionId },
+    include: [{ model: CartItem, as: 'items' }],
+  });
+
+  if (!guestCart || !guestCart.items || guestCart.items.length === 0) return;
+
+  let userCart = await Cart.findOne({ where: { userId } });
+  if (!userCart) {
+    await guestCart.update({ userId, sessionId: null });
+    return;
+  }
+
+  for (const item of guestCart.items) {
+    const existingItem = await CartItem.findOne({
+      where: { cartId: userCart.id, productId: item.productId },
+    });
+
+    if (existingItem) {
+      existingItem.quantity += item.quantity;
+      await existingItem.save();
+      await item.destroy();
+    } else {
+      await item.update({ cartId: userCart.id });
+    }
+  }
+
+  await guestCart.destroy();
+};
 
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+    const guestSessionId = req.sessionID;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required.' });
@@ -22,9 +56,14 @@ exports.register = async (req, res) => {
       password: hashedPassword 
     });
     
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return res.status(500).json({ error: err.message });
+      }
+      try {
+        await mergeGuestCartIntoUserCart(guestSessionId, user.id);
+      } catch (mergeError) {
+        return res.status(500).json({ error: mergeError.message });
       }
       return res.status(201).json({
         message: 'User registered successfully',
@@ -42,6 +81,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const guestSessionId = req.sessionID;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
@@ -57,9 +97,14 @@ exports.login = async (req, res) => {
     
     // Log user in using session or passport if needed, or return session info
     // If passport local strategy isn't set up, we can establish session manually:
-    req.login(user, (err) => {
+    req.login(user, async (err) => {
       if (err) {
         return res.status(500).json({ error: err.message });
+      }
+      try {
+        await mergeGuestCartIntoUserCart(guestSessionId, user.id);
+      } catch (mergeError) {
+        return res.status(500).json({ error: mergeError.message });
       }
       return res.json({ 
         message: 'Login successful', 
