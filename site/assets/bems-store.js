@@ -643,6 +643,9 @@
     if (params.get('google') === 'not-configured') {
       show(message, 'Google login is available, but OAuth keys are not configured on this machine yet.', 'notice');
     }
+    if (params.get('google') === 'failed') {
+      show(message, 'Google login could not be completed. Please try again or use email and password.', 'error');
+    }
 
     if (loginForm) {
       loginForm.addEventListener('submit', async (event) => {
