@@ -684,6 +684,19 @@
     }
   };
 
+  const initContact = () => {
+    const form = byId('contact-form');
+    const message = byId('contact-message');
+    if (!form || !message) return;
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = form.name.value.trim();
+      show(message, `Thank you${name ? `, ${name}` : ''}. BEMS Books support will respond soon.`, 'notice');
+      form.reset();
+    });
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     renderHeaderActions();
     await hydrateHeader();
@@ -699,6 +712,7 @@
       if (page === 'cart') await renderCart();
       if (page === 'auth') initAuth();
       if (page === 'account') await initAccount();
+      if (page === 'contact') initContact();
     } catch (error) {
       const target = byId('page-message') || byId('product-grid') || byId('featured-products') || byId('cart-root') || byId('account-root');
       show(target, error.message, 'error');

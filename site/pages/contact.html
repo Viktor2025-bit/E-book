@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/assets/bems-store.css">
   <script src="/assets/bems-store.js" defer></script>
 </head>
-<body>
+<body data-page="contact">
   <header class="site-header"><nav class="nav"><a class="brand" href="/index.html"><span class="brand-mark">BB</span><span>BEMS Books</span></a><div class="nav-links"><a href="/collections/all.html">Ebooks</a><a href="/pages/about.html">About</a><a href="/pages/faq.html">FAQ</a></div><div class="nav-actions"><a data-account-link href="/account/login.html">Login</a><a class="cart-link" href="/cart.html">Cart <span class="cart-count" data-cart-count>0</span></a></div></nav></header>
   <main class="container content-page">
     <p class="eyebrow">Contact</p>
@@ -19,10 +19,20 @@
       <p><strong>Support hours:</strong> Monday to Friday, 9:00 AM to 5:00 PM</p>
     </div>
     <h2>Send a message</h2>
-    <form class="form-stack" onsubmit="event.preventDefault(); alert('Thank you. BEMS Books support will respond soon.');">
-      <input class="input" type="text" placeholder="Your name" required>
-      <input class="input" type="email" placeholder="Email address" required>
-      <textarea class="textarea" placeholder="How can we help?" required></textarea>
+    <div id="contact-message" class="hidden"></div>
+    <form id="contact-form" class="form-stack">
+      <label class="field">
+        <span>Your name</span>
+        <input class="input" type="text" name="name" placeholder="Your name" required>
+      </label>
+      <label class="field">
+        <span>Email address</span>
+        <input class="input" type="email" name="email" placeholder="you@example.com" required>
+      </label>
+      <label class="field">
+        <span>Message</span>
+        <textarea class="textarea" name="message" placeholder="How can we help?" required></textarea>
+      </label>
       <button class="button gold" type="submit">Send message</button>
     </form>
   </main>
