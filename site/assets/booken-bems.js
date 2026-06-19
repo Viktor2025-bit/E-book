@@ -543,7 +543,11 @@
       if (!email) return;
 
       // Loading state
-      if (button) { button.disabled = true; button.textContent = 'Joining...'; }
+      if (button) {
+        button.classList.add('is-loading');
+        button.classList.remove('is-success');
+        button.innerHTML = 'Join list';
+      }
       if (message) { message.textContent = ''; message.style.color = ''; }
 
       try {
@@ -556,25 +560,38 @@
 
         if (res.ok) {
           form.reset();
+          if (button) {
+            button.classList.remove('is-loading');
+            button.classList.add('is-success');
+            button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+          }
           if (message) {
             message.textContent = data.alreadySubscribed
               ? "You're already on the list! We'll keep you updated."
               : (data.message || 'You\'re on the list! Check your inbox for a welcome email.');
             message.style.color = data.alreadySubscribed ? '#bd842b' : '#2f7d52';
           }
+          
+          // Revert button after 3 seconds
+          if (button) {
+            window.setTimeout(() => {
+              button.classList.remove('is-success');
+              button.innerHTML = 'Join list';
+            }, 3000);
+          }
         } else {
+          if (button) { button.classList.remove('is-loading'); button.innerHTML = 'Join list'; }
           if (message) {
             message.textContent = data.error || 'Something went wrong. Please try again.';
             message.style.color = '#c0392b';
           }
         }
       } catch (_) {
+        if (button) { button.classList.remove('is-loading'); button.innerHTML = 'Join list'; }
         if (message) {
           message.textContent = 'Could not connect. Please check your connection and try again.';
           message.style.color = '#c0392b';
         }
-      } finally {
-        if (button) { button.disabled = false; button.textContent = 'Join list'; }
       }
     });
   };

@@ -1489,13 +1489,56 @@ body.bems-booken-home {
 }
 
 .bems-reader-form button {
+  align-items: center;
   background: var(--bems-gold);
   border: 0;
   color: #fff;
   cursor: pointer;
+  display: inline-flex;
   font-weight: 800;
+  justify-content: center;
   min-height: 52px;
-  transition: background 220ms ease, transform 220ms ease;
+  transition: background 220ms ease, transform 220ms ease, color 220ms ease;
+  position: relative;
+}
+
+.bems-reader-form button svg {
+  height: 20px;
+  width: 20px;
+}
+
+.bems-reader-form button.is-loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.bems-reader-form button.is-loading::after {
+  content: "";
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: bemsButtonSpin 0.8s linear infinite;
+}
+
+.bems-reader-form button.is-success {
+  background: #2f7d52;
+}
+
+.bems-reader-form button.is-success svg path {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: bemsButtonCheckDraw 0.4s 0.1s ease forwards;
+}
+
+@keyframes bemsButtonSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bemsButtonCheckDraw {
+  to { stroke-dashoffset: 0; }
 }
 
 .bems-reader-form button:hover {
