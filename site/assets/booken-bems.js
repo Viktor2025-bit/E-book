@@ -535,12 +535,47 @@
     const form = document.querySelector('[data-reader-form]');
     if (!form) return;
     const message = form.querySelector('[data-reader-message]');
-    form.addEventListener('submit', (event) => {
+    const button = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
       const email = new FormData(form).get('email').toString().trim();
       if (!email) return;
-      if (message) message.textContent = 'Thank you. BEMS Books will keep this reader list updated.';
-      form.reset();
+
+      // Loading state
+      if (button) { button.disabled = true; button.textContent = 'Joining...'; }
+      if (message) { message.textContent = ''; message.style.color = ''; }
+
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source: 'homepage' }),
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          form.reset();
+          if (message) {
+            message.textContent = data.alreadySubscribed
+              ? "You're already on the list! We'll keep you updated."
+              : (data.message || 'You\'re on the list! Check your inbox for a welcome email.');
+            message.style.color = data.alreadySubscribed ? '#bd842b' : '#2f7d52';
+          }
+        } else {
+          if (message) {
+            message.textContent = data.error || 'Something went wrong. Please try again.';
+            message.style.color = '#c0392b';
+          }
+        }
+      } catch (_) {
+        if (message) {
+          message.textContent = 'Could not connect. Please check your connection and try again.';
+          message.style.color = '#c0392b';
+        }
+      } finally {
+        if (button) { button.disabled = false; button.textContent = 'Join list'; }
+      }
     });
   };
 

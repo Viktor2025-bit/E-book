@@ -4,6 +4,7 @@ const Cart = require('./Cart');
 const CartItem = require('./CartItem');
 const Order = require('./Order');
 const OrderItem = require('./OrderItem');
+const Subscriber = require('./Subscriber');
 const { sequelize } = require('../config/database');
 
 // Associations
@@ -39,5 +40,6 @@ module.exports = {
   CartItem,
   Order,
   OrderItem,
+  Subscriber,
   sequelize
 };
