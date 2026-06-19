@@ -325,6 +325,22 @@ body.bems-booken-home {
   transform: translateX(0);
 }
 
+.bems-slide.is-active .slider-content h3 {
+  animation: bemsHeroTextRise 760ms cubic-bezier(.18,.89,.32,1) both;
+}
+
+.bems-slide.is-active .slider-content h1 {
+  animation: bemsHeroTextRise 760ms 120ms cubic-bezier(.18,.89,.32,1) both;
+}
+
+.bems-slide.is-active .slider-content p {
+  animation: bemsHeroTextRise 760ms 220ms cubic-bezier(.18,.89,.32,1) both;
+}
+
+.bems-slide.is-active .slider__animated__btn__wrap {
+  animation: bemsHeroTextRise 760ms 340ms cubic-bezier(.18,.89,.32,1) both;
+}
+
 .bems-original-hero .bems-slide {
   background-color: #effafa;
   background-position: center center;
@@ -664,15 +680,8 @@ body.bems-booken-home {
   padding: 24px 20px 20px;
   position: relative;
   text-decoration: none;
-  animation: bemsCardFadeUp 620ms ease both;
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
-
-.bems-category-card:nth-child(2) { animation-delay: 50ms; }
-.bems-category-card:nth-child(3) { animation-delay: 100ms; }
-.bems-category-card:nth-child(4) { animation-delay: 150ms; }
-.bems-category-card:nth-child(5) { animation-delay: 200ms; }
-.bems-category-card:nth-child(6) { animation-delay: 250ms; }
 
 .bems-category-card::before {
   background: var(--cat-accent);
@@ -833,20 +842,11 @@ body.bems-booken-home {
   min-height: 545px;
   overflow: hidden;
   position: relative;
-  animation: bemsCardFadeUp 650ms ease both;
   transition: box-shadow 220ms ease, transform 220ms ease, border-color 220ms ease;
 }
 
-.bems-product-card:nth-child(2) { animation-delay: 60ms; }
-.bems-product-card:nth-child(3) { animation-delay: 120ms; }
-.bems-product-card:nth-child(4) { animation-delay: 180ms; }
-.bems-product-card:nth-child(5) { animation-delay: 240ms; }
-.bems-product-card:nth-child(6) { animation-delay: 300ms; }
-.bems-product-card:nth-child(7) { animation-delay: 360ms; }
-.bems-product-card:nth-child(8) { animation-delay: 420ms; }
-
 .bems-product-card::after {
-  background: radial-gradient(circle at center, rgba(19, 39, 47, 0.24), transparent 58%);
+  background: radial-gradient(circle at center, rgba(7, 25, 32, 0.5), rgba(7, 25, 32, 0.24) 34%, transparent 68%);
   content: "";
   inset: 0;
   opacity: 0;
@@ -869,7 +869,20 @@ body.bems-booken-home {
 }
 
 .bems-product-card.is-clicked::after {
-  animation: bemsCardBlackPulse 480ms ease both;
+  animation: bemsCardBlackPulse 620ms ease both;
+}
+
+.bems-card-ripple {
+  background:
+    radial-gradient(circle, rgba(7, 25, 32, 0.86) 0%, rgba(7, 25, 32, 0.68) 28%, rgba(189, 132, 43, 0.3) 46%, transparent 68%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: scale(0.05);
+  z-index: 4;
+  animation: bemsBookRipple 720ms cubic-bezier(.2,.72,.14,1) both;
 }
 
 .bems-product-image-wrap {
@@ -1486,12 +1499,80 @@ body.bems-booken-home {
   padding-top: 20px;
 }
 
+.bems-reveal {
+  opacity: 0;
+  transform: translateY(34px) scale(0.985);
+  transition:
+    opacity 720ms ease,
+    transform 720ms cubic-bezier(.18,.89,.32,1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.bems-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.bems-product-card.bems-reveal {
+  transform: translateY(38px) scale(0.975);
+}
+
+.bems-product-card.bems-reveal.is-visible {
+  transform: translateY(0) scale(1);
+}
+
+.bems-product-card.bems-reveal.is-visible:hover {
+  transform: translateY(-4px) scale(1);
+}
+
+.bems-product-card.bems-reveal.is-visible.is-clicked {
+  transform: translateY(-6px) scale(1);
+}
+
+.bems-category-card.bems-reveal,
+.bems-reading-path.bems-reveal {
+  transform: translateY(30px) scale(0.98);
+}
+
+.bems-category-card.bems-reveal.is-visible,
+.bems-reading-path.bems-reveal.is-visible {
+  transform: translateY(0) scale(1);
+}
+
+.bems-category-card.bems-reveal.is-visible:hover {
+  transform: translateY(-7px) scale(1);
+}
+
+.bems-reading-path.bems-reveal.is-visible:hover {
+  transform: translateY(-6px) scale(1);
+}
+
+.bems-banner.bems-reveal {
+  transform: translateY(28px) scale(0.97);
+}
+
+.bems-banner.bems-reveal.is-visible {
+  transform: translateY(0) scale(1);
+}
+
 @keyframes bemsFloat {
   0%, 100% {
     transform: translateY(0);
   }
   50% {
     transform: translateY(-14px);
+  }
+}
+
+@keyframes bemsHeroTextRise {
+  0% {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -1511,23 +1592,41 @@ body.bems-booken-home {
 }
 
 @keyframes bemsBookCoverClick {
-  0% { transform: scale(1.01) rotate(0deg); }
-  45% { transform: scale(1.06) rotate(-1.2deg); }
-  100% { transform: scale(1.02) rotate(0deg); }
+  0% { filter: brightness(1); transform: scale(1.01) rotate(0deg); }
+  38% { filter: brightness(0.86); transform: scale(1.08) rotate(-1.4deg); }
+  70% { filter: brightness(1.08); transform: scale(1.035) rotate(0.6deg); }
+  100% { filter: brightness(1); transform: scale(1.02) rotate(0deg); }
 }
 
 @keyframes bemsCardBlackPulse {
   0% {
     opacity: 0;
-    transform: scale(0.58);
+    transform: scale(0.45);
   }
   38% {
     opacity: 1;
-    transform: scale(1.03);
+    transform: scale(1.08);
   }
   100% {
     opacity: 0;
-    transform: scale(1.35);
+    transform: scale(1.65);
+  }
+}
+
+@keyframes bemsBookRipple {
+  0% {
+    opacity: 0;
+    transform: scale(0.05);
+  }
+  18% {
+    opacity: 1;
+  }
+  68% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
   }
 }
 
@@ -1568,11 +1667,137 @@ body.bems-booken-home {
   }
 }
 
+@keyframes bemsRippleExpand {
+  0% {
+    opacity: 0.8;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes bemsRippleExpand2 {
+  0% {
+    opacity: 0.6;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes bemsRippleExpand3 {
+  0% {
+    opacity: 0.4;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+
+@keyframes bemsSparkle {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
+
+@keyframes bemsGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(189, 132, 43, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(189, 132, 43, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(189, 132, 43, 0);
+  }
+}
+
+@keyframes bemsBurstSpin {
+  0% {
+    transform: translate(var(--tx), var(--ty)) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}
+
+.bems-sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #bd842b, rgba(189, 132, 43, 0.4));
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(189, 132, 43, 0.6);
+  z-index: 10;
+}
+
+@keyframes bemsPageFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes bemsPageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+html.bems-page-transition {
+  animation: bemsPageFadeOut 300ms ease-out forwards;
+}
+
+body.bems-page-load {
+  animation: bemsPageFadeIn 400ms ease-out forwards;
+}
+
+.bems-ripple-ring {
+  position: absolute;
+  border: 2px solid rgba(189, 132, 43, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
+  }
+
+  .bems-reveal {
+    opacity: 1;
+    transform: none;
   }
 }
 

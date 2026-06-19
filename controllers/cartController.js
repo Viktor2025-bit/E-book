@@ -43,6 +43,11 @@ exports.addToCart = async (req, res) => {
     const userId = req.user ? req.user.id : null;
     const sessionId = req.sessionID;
     const { productId, quantity = 1 } = req.body;
+    const parsedQty = parseInt(quantity);
+
+    if (isNaN(parsedQty) || parsedQty < 1) {
+      return res.status(400).json({ message: 'Quantity must be at least 1' });
+    }
 
     if (!productId) {
       return res.status(400).json({ message: 'Product ID is required' });
@@ -62,13 +67,13 @@ exports.addToCart = async (req, res) => {
     });
 
     if (cartItem) {
-      cartItem.quantity += parseInt(quantity);
+      cartItem.quantity += parsedQty;
       await cartItem.save();
     } else {
       cartItem = await CartItem.create({
         cartId: cart.id,
         productId,
-        quantity: parseInt(quantity)
+        quantity: parsedQty
       });
     }
 

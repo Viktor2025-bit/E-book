@@ -104,13 +104,98 @@
       node.classList.remove('is-pulsing');
       void node.offsetWidth;
       node.classList.add('is-pulsing');
+      
+      // Add glow effect
+      const parent = node.parentElement;
+      if (parent && !parent.querySelector('.bems-cart-glow')) {
+        const glow = document.createElement('span');
+        glow.className = 'bems-cart-glow';
+        glow.style.position = 'absolute';
+        glow.style.inset = '-8px';
+        glow.style.borderRadius = '50%';
+        glow.style.pointerEvents = 'none';
+        glow.style.animation = 'bemsGlow 600ms ease-out forwards';
+        parent.style.position = 'relative';
+        parent.appendChild(glow);
+        window.setTimeout(() => glow.remove(), 600);
+      }
+      
       window.setTimeout(() => node.classList.remove('is-pulsing'), 700);
     });
   };
 
-  const animateProductCard = (trigger) => {
+  const spawnCardRipple = (card, event) => {
+    if (reduceMotion || !card) return;
+    const oldRipple = card.querySelector('.bems-card-ripple');
+    if (oldRipple) oldRipple.remove();
+
+    const ripple = document.createElement('span');
+    ripple.className = 'bems-card-ripple';
+    const rect = card.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.25;
+    const x = event && event.clientX ? event.clientX - rect.left : rect.width / 2;
+    const y = event && event.clientY ? event.clientY - rect.top : rect.height / 2;
+
+    ripple.style.width = `${size}px`;
+    ripple.style.height = `${size}px`;
+    ripple.style.left = `${x - size / 2}px`;
+    ripple.style.top = `${y - size / 2}px`;
+    card.appendChild(ripple);
+    window.setTimeout(() => ripple.remove(), 760);
+  };
+
+  const createMultiRippleEffect = (card, x, y) => {
+    if (reduceMotion || !card) return;
+    const rect = card.getBoundingClientRect();
+    
+    // Create multiple ripple rings
+    for (let i = 0; i < 3; i++) {
+      const ring = document.createElement('div');
+      ring.className = 'bems-ripple-ring';
+      const size = 40 + i * 20;
+      ring.style.width = `${size}px`;
+      ring.style.height = `${size}px`;
+      ring.style.left = `${x - size / 2}px`;
+      ring.style.top = `${y - size / 2}px`;
+      ring.style.animation = `bemsRippleExpand${i === 0 ? '' : i + 1} 600ms ease-out forwards`;
+      ring.style.animationDelay = `${i * 80}ms`;
+      card.appendChild(ring);
+      window.setTimeout(() => ring.remove(), 600 + i * 80);
+    }
+  };
+
+  const createSparkleEffect = (card, event) => {
+    if (reduceMotion || !card) return;
+    const rect = card.getBoundingClientRect();
+    const x = event && event.clientX ? event.clientX - rect.left : rect.width / 2;
+    const y = event && event.clientY ? event.clientY - rect.top : rect.height / 2;
+    
+    // Create 12 sparkles radiating outward
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      const distance = 80 + Math.random() * 60;
+      const tx = Math.cos(angle) * distance;
+      const ty = Math.sin(angle) * distance;
+      
+      const sparkle = document.createElement('div');
+      sparkle.className = 'bems-sparkle';
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      sparkle.style.setProperty('--tx', `${tx}px`);
+      sparkle.style.setProperty('--ty', `${ty}px`);
+      sparkle.style.animation = `bemsSparkle 600ms ease-out forwards`;
+      sparkle.style.animationDelay = `${i * 30}ms`;
+      card.appendChild(sparkle);
+      window.setTimeout(() => sparkle.remove(), 600 + i * 30);
+    }
+  };
+
+  const animateProductCard = (trigger, event) => {
     const card = trigger && trigger.closest ? trigger.closest('.bems-product-card') : null;
     if (!card) return;
+    
+    spawnCardRipple(card, event);
+    
     card.classList.remove('is-clicked');
     void card.offsetWidth;
     card.classList.add('is-clicked');
@@ -124,17 +209,19 @@
       link.addEventListener('click', (event) => {
         if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        animateProductCard(link);
+        animateProductCard(link, event);
+        
+        // Navigate after animation completes
         window.setTimeout(() => {
           window.location.href = link.href;
-        }, reduceMotion ? 0 : 180);
+        }, reduceMotion ? 0 : 260);
       });
     });
 
     root.querySelectorAll('.bems-product-card button').forEach((button) => {
       if (button.dataset.cardButtonAnimationBound) return;
       button.dataset.cardButtonAnimationBound = 'true';
-      button.addEventListener('pointerdown', () => animateProductCard(button));
+      button.addEventListener('pointerdown', (event) => animateProductCard(button, event));
     });
   };
 
@@ -210,8 +297,8 @@
     root.querySelectorAll('[data-add]').forEach((button) => {
       if (button.dataset.addBound) return;
       button.dataset.addBound = 'true';
-      button.addEventListener('click', async () => {
-        animateProductCard(button);
+      button.addEventListener('click', async (event) => {
+        animateProductCard(button, event);
         const oldText = button.innerHTML;
         button.disabled = true;
         button.innerHTML = icons.sync;
@@ -219,10 +306,15 @@
           await endpoints.add(button.dataset.add, 1);
           await updateCartCount();
           pulseCartCount();
+          
+          // Add success animation
           button.innerHTML = icons.check;
+          button.style.animation = 'bemsGlow 400ms ease-out forwards';
+          
           setTimeout(() => {
             button.innerHTML = oldText;
             button.disabled = false;
+            button.style.animation = '';
           }, 900);
         } catch (error) {
           alert(error.message || 'Could not add this ebook to cart.');
@@ -235,14 +327,20 @@
     root.querySelectorAll('[data-love]').forEach((button) => {
       if (button.dataset.loveBound) return;
       button.dataset.loveBound = 'true';
-      button.addEventListener('click', () => {
-        animateProductCard(button);
+      button.addEventListener('click', (event) => {
+        animateProductCard(button, event);
         const saved = getWishlist();
         const handle = button.dataset.love;
         const next = saved.includes(handle)
           ? saved.filter((item) => item !== handle)
           : saved.concat(handle);
         setWishlist(next);
+        
+        // Add heart glow effect
+        button.style.animation = 'bemsGlow 400ms ease-out forwards';
+        setTimeout(() => {
+          button.style.animation = '';
+        }, 400);
       });
     });
   };
@@ -257,6 +355,7 @@
       bindProductCardAnimations(track);
       bindProductActions(track);
       updateSavedButtons();
+      initEntranceAnimations(track);
       initProductCarousel(track);
     } catch (error) {
       track.innerHTML = '<p class="bems-empty">Featured ebooks could not load. Please refresh the page.</p>';
@@ -426,11 +525,54 @@
     });
   };
 
+  const initEntranceAnimations = (scope = document) => {
+    if (reduceMotion) return;
+    const candidates = scope.querySelectorAll([
+      '.bems-original-hero .slider-content > *',
+      '.bems-quick-trust__grid > div',
+      '.section-title',
+      '.bems-category-card',
+      '.bems-product-card',
+      '.bems-reading-path',
+      '.bems-banner',
+      '.bems-discount-content > *',
+      '.bems-discount-image',
+      '.bems-testimonial-area .single-testimonial',
+      '.bems-assurance',
+      '.bems-reader-list'
+    ].join(','));
+
+    const elements = Array.from(candidates).filter((element) => !element.dataset.revealBound);
+    if (!elements.length) return;
+
+    elements.forEach((element, index) => {
+      element.dataset.revealBound = 'true';
+      element.classList.add('bems-reveal');
+      element.style.setProperty('--reveal-delay', `${Math.min(index * 55, 420)}ms`);
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      elements.forEach((element) => element.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+
+    elements.forEach((element) => observer.observe(element));
+  };
+
   document.addEventListener('DOMContentLoaded', async () => {
     initHeroSlider();
     initSearch();
     initWishlistNav();
     initReaderForm();
+    initEntranceAnimations();
     updateWishlistCount();
     updateCartCount();
     updateAccountLink();

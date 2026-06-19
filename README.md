@@ -55,6 +55,46 @@ npm start
 
 Open `http://localhost:3000`.
 
+## Render Deployment
+
+This app is ready for Render deployment.
+
+1. Push the repository to GitHub.
+2. Create a new web service on Render and connect your GitHub repo.
+3. Render will auto-detect Node.js. Set the build command to:
+
+```bash
+npm install
+```
+
+And start command to:
+
+```bash
+npm start
+```
+
+4. Add the required environment variables in Render:
+
+- `PORT` (optional)
+- `DATABASE_URL`
+- `SESSION_SECRET`
+- `PAYSTACK_PUBLIC_KEY`
+- `PAYSTACK_SECRET_KEY`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+
+5. Provision a PostgreSQL database on Render, then copy its connection string into `DATABASE_URL`.
+6. Deploy — Render builds and runs the app automatically. Open the auto-generated Render URL.
+
+## Render Checklist
+
+- Push the repo to GitHub.
+- Create a new Render web service and connect the repo.
+- Set build and start commands (see above).
+- Add `DATABASE_URL`, `SESSION_SECRET`, `PAYSTACK_PUBLIC_KEY`, `PAYSTACK_SECRET_KEY`, `GOOGLE_CLIENT_ID`, and `GOOGLE_CLIENT_SECRET`.
+- Provision a PostgreSQL database in Render and copy its connection string to `DATABASE_URL`.
+- Confirm the app starts by visiting the Render URL.
+
 ## Submission Notes
 
 The checkout page shows a clear message if Paystack keys are missing. Google login remains visible, but redirects back to the login page with a helpful notice if OAuth keys are not configured.

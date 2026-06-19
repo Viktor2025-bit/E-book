@@ -44,8 +44,14 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret && process.env.NODE_ENV === 'production') {
+  console.error('FATAL ERROR: SESSION_SECRET environment variable is required in production.');
+  process.exit(1);
+}
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'keyboard cat',
+  secret: sessionSecret || 'keyboard cat',
   resave: false,
   saveUninitialized: true,
 }));
