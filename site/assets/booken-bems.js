@@ -190,12 +190,31 @@
     }
   };
 
+  const spawnClickSpinner = (card) => {
+    if (reduceMotion || !card) return;
+    const old = card.querySelector('.bems-click-spinner');
+    if (old) old.remove();
+
+    const spinner = document.createElement('div');
+    spinner.className = 'bems-click-spinner';
+    spinner.innerHTML = `
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="20" stroke="rgba(255,255,255,0.18)" stroke-width="3.5"/>
+        <circle class="bems-spinner-arc" cx="24" cy="24" r="20" stroke="#bd842b" stroke-width="3.5"
+          stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="126"/>
+      </svg>
+    `;
+    card.appendChild(spinner);
+    window.setTimeout(() => spinner.remove(), 600);
+  };
+
   const animateProductCard = (trigger, event) => {
     const card = trigger && trigger.closest ? trigger.closest('.bems-product-card') : null;
     if (!card) return;
-    
+
     spawnCardRipple(card, event);
-    
+    spawnClickSpinner(card);
+
     card.classList.remove('is-clicked');
     void card.offsetWidth;
     card.classList.add('is-clicked');

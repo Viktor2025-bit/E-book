@@ -882,6 +882,46 @@ body.bems-booken-home {
   animation: bemsCardBlackPulse 620ms ease both;
 }
 
+.bems-click-spinner {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  animation: bemsSpinnerFadeIn 80ms ease forwards;
+}
+
+.bems-click-spinner svg {
+  animation: bemsSpinnerRotate 500ms linear forwards;
+  height: 72px;
+  width: 72px;
+  filter: drop-shadow(0 0 8px rgba(189, 132, 43, 0.6));
+}
+
+.bems-spinner-arc {
+  animation: bemsSpinnerDraw 420ms cubic-bezier(.4,0,.2,1) forwards;
+  transform-origin: center;
+}
+
+@keyframes bemsSpinnerFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bemsSpinnerRotate {
+  0%   { transform: rotate(-90deg); }
+  70%  { transform: rotate(180deg); }
+  100% { transform: rotate(270deg); opacity: 0; }
+}
+
+@keyframes bemsSpinnerDraw {
+  0%   { stroke-dashoffset: 126; }
+  60%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -126; opacity: 0; }
+}
+
 .bems-card-ripple {
   background:
     radial-gradient(circle, rgba(7, 25, 32, 0.86) 0%, rgba(7, 25, 32, 0.68) 28%, rgba(189, 132, 43, 0.3) 46%, transparent 68%);
