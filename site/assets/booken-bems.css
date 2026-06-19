@@ -1092,6 +1092,109 @@ body.bems-booken-home {
   padding: 30px;
 }
 
+.bems-reading-path-area {
+  background: linear-gradient(180deg, #fbfaf7 0%, #ffffff 100%);
+  padding: 82px 0 72px;
+}
+
+.bems-reading-path-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bems-reading-path {
+  --path-accent: var(--bems-gold);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(246, 248, 245, 0.82)),
+    #fff;
+  border: 1px solid rgba(19, 39, 47, 0.1);
+  color: var(--bems-ink);
+  min-height: 260px;
+  overflow: hidden;
+  padding: 30px 28px;
+  position: relative;
+  text-decoration: none;
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.bems-reading-path::after {
+  background: color-mix(in srgb, var(--path-accent) 18%, transparent);
+  border-radius: 999px;
+  content: "";
+  height: 150px;
+  position: absolute;
+  right: -68px;
+  top: -72px;
+  width: 150px;
+}
+
+.bems-reading-path:hover {
+  border-color: color-mix(in srgb, var(--path-accent) 34%, rgba(19, 39, 47, 0.08));
+  box-shadow: 0 20px 44px rgba(19, 39, 47, 0.1);
+  color: var(--bems-ink);
+  transform: translateY(-6px);
+}
+
+.bems-reading-path span {
+  color: var(--path-accent);
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  margin-bottom: 28px;
+}
+
+.bems-reading-path h3 {
+  color: var(--bems-ink);
+  font-size: 27px;
+  line-height: 1.22;
+  margin: 0 0 16px;
+  max-width: 330px;
+}
+
+.bems-reading-path p {
+  color: var(--bems-muted);
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0 0 24px;
+  max-width: 360px;
+}
+
+.bems-reading-path em {
+  align-items: center;
+  color: var(--path-accent);
+  display: inline-flex;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+  gap: 8px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.bems-reading-path em::after {
+  content: "->";
+  font-size: 15px;
+  transition: transform 180ms ease;
+}
+
+.bems-reading-path:hover em::after {
+  transform: translateX(4px);
+}
+
+.bems-reading-path--study {
+  --path-accent: #8a4f2f;
+}
+
+.bems-reading-path--build {
+  --path-accent: #bd842b;
+}
+
+.bems-reading-path--unwind {
+  --path-accent: #1f6b58;
+}
+
 .bems-banner {
   color: #fff;
   display: block;
@@ -1552,6 +1655,18 @@ body.bems-booken-home {
   .bems-reader-list {
     grid-template-columns: 1fr;
   }
+
+  .bems-reading-path-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bems-reading-path {
+    padding: 26px 22px;
+  }
+
+  .bems-reading-path h3 {
+    font-size: 23px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1623,8 +1738,17 @@ body.bems-booken-home {
   .bems-category-area,
   .bems-product-area,
   .bems-banner-area,
+  .bems-reading-path-area,
   .bems-assurance-area {
     padding: 58px 0;
+  }
+
+  .bems-reading-path-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bems-reading-path {
+    min-height: 220px;
   }
 
   .bems-quick-trust__grid {
