@@ -548,7 +548,7 @@
     elements.forEach((element, index) => {
       element.dataset.revealBound = 'true';
       element.classList.add('bems-reveal');
-      element.style.setProperty('--reveal-delay', `${Math.min(index * 55, 420)}ms`);
+      element.style.setProperty('--reveal-delay', `${Math.min(index * 28, 160)}ms`);
     });
 
     if (!('IntersectionObserver' in window)) {
@@ -562,7 +562,7 @@
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
       });
-    }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+    }, { threshold: 0.06, rootMargin: '0px 0px 0px 0px' });
 
     elements.forEach((element) => observer.observe(element));
   };

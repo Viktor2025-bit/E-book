@@ -326,19 +326,19 @@ body.bems-booken-home {
 }
 
 .bems-slide.is-active .slider-content h3 {
-  animation: bemsHeroTextRise 760ms cubic-bezier(.18,.89,.32,1) both;
+  animation: bemsHeroTextRise 400ms cubic-bezier(.18,.89,.32,1) both;
 }
 
 .bems-slide.is-active .slider-content h1 {
-  animation: bemsHeroTextRise 760ms 120ms cubic-bezier(.18,.89,.32,1) both;
+  animation: bemsHeroTextRise 400ms 60ms cubic-bezier(.18,.89,.32,1) both;
 }
 
 .bems-slide.is-active .slider-content p {
-  animation: bemsHeroTextRise 760ms 220ms cubic-bezier(.18,.89,.32,1) both;
+  animation: bemsHeroTextRise 400ms 110ms cubic-bezier(.18,.89,.32,1) both;
 }
 
 .bems-slide.is-active .slider__animated__btn__wrap {
-  animation: bemsHeroTextRise 760ms 340ms cubic-bezier(.18,.89,.32,1) both;
+  animation: bemsHeroTextRise 400ms 170ms cubic-bezier(.18,.89,.32,1) both;
 }
 
 .bems-original-hero .bems-slide {
@@ -1511,10 +1511,10 @@ body.bems-booken-home {
 
 .bems-reveal {
   opacity: 0;
-  transform: translateY(34px) scale(0.985);
+  transform: translateY(18px) scale(0.99);
   transition:
-    opacity 720ms ease,
-    transform 720ms cubic-bezier(.18,.89,.32,1);
+    opacity 380ms ease,
+    transform 380ms cubic-bezier(.18,.89,.32,1);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
@@ -1525,7 +1525,7 @@ body.bems-booken-home {
 }
 
 .bems-product-card.bems-reveal {
-  transform: translateY(38px) scale(0.975);
+  transform: translateY(20px) scale(0.98);
 }
 
 .bems-product-card.bems-reveal.is-visible {
@@ -1542,7 +1542,7 @@ body.bems-booken-home {
 
 .bems-category-card.bems-reveal,
 .bems-reading-path.bems-reveal {
-  transform: translateY(30px) scale(0.98);
+  transform: translateY(16px) scale(0.99);
 }
 
 .bems-category-card.bems-reveal.is-visible,
@@ -1559,7 +1559,7 @@ body.bems-booken-home {
 }
 
 .bems-banner.bems-reveal {
-  transform: translateY(28px) scale(0.97);
+  transform: translateY(14px) scale(0.99);
 }
 
 .bems-banner.bems-reveal.is-visible {
@@ -1578,7 +1578,7 @@ body.bems-booken-home {
 @keyframes bemsHeroTextRise {
   0% {
     opacity: 0;
-    transform: translateY(34px);
+    transform: translateY(16px);
   }
   100% {
     opacity: 1;
