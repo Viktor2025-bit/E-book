@@ -1427,6 +1427,21 @@ body.bems-booken-home {
   margin: 0;
 }
 
+.bems-memphis-graphic {
+  display: block;
+  max-width: 180px;
+  height: auto;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(19, 39, 47, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bems-assurance:hover .bems-memphis-graphic {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(19, 39, 47, 0.12);
+}
+
 .bems-reader-list-area {
   background: #fff;
   padding: 20px 0 86px;
