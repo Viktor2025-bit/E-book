@@ -44,7 +44,7 @@ const sendWelcomeEmail = async (email) => {
             <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border:1px solid #e4e1da;max-width:600px;width:100%;">
               <!-- Header -->
               <tr>
-                <td style="background:linear-gradient(135deg,#13272f 0%,#243c43 56%,#bd842b 100%);padding:32px 40px;">
+                <td style="background:linear-gradient(135deg,#13272f 0%,#243c43 56%,#88e04b 100%);padding:32px 40px;">
                   <table cellpadding="0" cellspacing="0">
                     <tr>
                       <td style="background:rgba(255,255,255,0.14);border-radius:8px;color:#fff;font-size:18px;font-weight:800;height:46px;text-align:center;width:46px;line-height:46px;">BB</td>
@@ -88,6 +88,7 @@ const sendWelcomeEmail = async (email) => {
 
 // POST /api/subscribe
 router.post('/', async (req, res) => {
+  console.log('HIT /api/subscribe POST', req.body);
   const rawEmail = (req.body.email || '').toString().trim().toLowerCase();
 
   if (!rawEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)) {

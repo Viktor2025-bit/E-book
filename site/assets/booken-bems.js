@@ -200,7 +200,7 @@
     spinner.innerHTML = `
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="24" cy="24" r="20" stroke="rgba(255,255,255,0.18)" stroke-width="3.5"/>
-        <circle class="bems-spinner-arc" cx="24" cy="24" r="20" stroke="#bd842b" stroke-width="3.5"
+        <circle class="bems-spinner-arc" cx="24" cy="24" r="20" stroke="#88e04b" stroke-width="3.5"
           stroke-linecap="round" stroke-dasharray="126" stroke-dashoffset="126"/>
       </svg>
     `;
@@ -569,7 +569,7 @@
             message.textContent = data.alreadySubscribed
               ? "You're already on the list! We'll keep you updated."
               : (data.message || 'You\'re on the list! Check your inbox for a welcome email.');
-            message.style.color = data.alreadySubscribed ? '#bd842b' : '#2f7d52';
+            message.style.color = data.alreadySubscribed ? '#88e04b' : '#2f7d52';
           }
           
           // Revert button after 3 seconds

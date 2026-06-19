@@ -150,12 +150,7 @@ app.get([
 
 app.use(redirectLegacyMirrorPage);
 
-app.use(express.static(SITE_DIR));
-
-// Keep mirrored local CDN files available for fonts and existing cover assets.
-app.use('/cdn', express.static(MIRRORED_CDN_DIR));
-app.use('/s3.amazonaws.com', express.static(path.join(__dirname, 's3.amazonaws.com')));
-
+// API routes must come before static file middleware
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
@@ -165,6 +160,12 @@ app.use('/api/subscribe', subscribeRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'BEMS Books API is running' });
 });
+
+app.use(express.static(SITE_DIR));
+
+// Keep mirrored local CDN files available for fonts and existing cover assets.
+app.use('/cdn', express.static(MIRRORED_CDN_DIR));
+app.use('/s3.amazonaws.com', express.static(path.join(__dirname, 's3.amazonaws.com')));
 
 // Legacy mirrored endpoints should not inject full fallback HTML.
 app.get('/recommendations/products', (req, res) => {

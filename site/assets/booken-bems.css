@@ -1,8 +1,8 @@
 :root {
   --bems-ink: #13272f;
   --bems-ink-2: #243c43;
-  --bems-gold: #bd842b;
-  --bems-gold-dark: #99651d;
+  --bems-lime: #88e04b;
+  --bems-lime-dark: #74cf3a;
   --bems-sage: #e6efeb;
   --bems-sky: #eaf4f8;
   --bems-paper: #fbfaf7;
@@ -52,7 +52,7 @@ body.bems-booken-home {
 
 .bems-logo__mark {
   align-items: center;
-  background: linear-gradient(135deg, var(--bems-ink) 0%, var(--bems-ink-2) 54%, var(--bems-gold) 100%);
+  background: linear-gradient(135deg, var(--bems-ink) 0%, var(--bems-ink-2) 54%, var(--bems-lime) 100%);
   border-radius: 8px;
   color: #fff;
   display: inline-flex;
@@ -96,7 +96,7 @@ body.bems-booken-home {
 }
 
 .bems-main-menu > ul > li > a:hover {
-  color: var(--bems-gold);
+  color: var(--bems-lime);
 }
 
 .bems-header-actions {
@@ -124,7 +124,7 @@ body.bems-booken-home {
 }
 
 .bems-icon-btn:hover {
-  color: var(--bems-gold);
+  color: var(--bems-lime);
 }
 
 .bems-profile-link {
@@ -133,7 +133,7 @@ body.bems-booken-home {
 
 .bems-user-avatar {
   align-items: center;
-  background: linear-gradient(135deg, #173f3a 0%, #bd842b 100%);
+  background: linear-gradient(135deg, #173f3a 0%, #88e04b 100%);
   border: 1px solid rgba(23, 63, 58, 0.16);
   border-radius: 50%;
   color: #fff;
@@ -233,9 +233,9 @@ body.bems-booken-home {
 
 .bems-search button[type="submit"],
 .slider-content-1 .slider-btn a {
-  background: var(--bems-gold);
+  background: var(--bems-lime);
   border: 0;
-  color: #fff;
+  color: var(--bems-ink);
   cursor: pointer;
   font-weight: 700;
   height: 48px;
@@ -245,7 +245,7 @@ body.bems-booken-home {
 
 .bems-search button[type="submit"]:hover,
 .slider-content-1 .slider-btn a:hover {
-  background: var(--bems-gold-dark);
+  background: var(--bems-lime-dark);
   color: #fff;
 }
 
@@ -433,10 +433,10 @@ body.bems-booken-home {
 .bems-original-hero .slider__animated__btn .bems-feature-jump {
   align-items: center;
   background: transparent;
-  border: 1px solid var(--bems-gold);
+  border: 1px solid var(--bems-lime);
   border-radius: 50%;
   box-shadow: 0 4px 30px rgba(189, 132, 43, 0.2);
-  color: var(--bems-gold);
+  color: var(--bems-lime);
   display: inline-flex;
   font-size: 18px;
   height: 65px;
@@ -448,8 +448,8 @@ body.bems-booken-home {
 }
 
 .bems-original-hero .slider__animated__btn .bems-feature-jump:hover {
-  background: var(--bems-gold);
-  color: #fff;
+  background: var(--bems-lime);
+  color: var(--bems-ink);
 }
 
 .bems-original-hero .slider__animated__btn .bems-feature-jump::before,
@@ -520,7 +520,7 @@ body.bems-booken-home {
 }
 
 .slider-content-1 h5 {
-  color: var(--bems-gold);
+  color: var(--bems-lime);
   font-size: 16px;
   font-weight: 800;
   letter-spacing: 0;
@@ -581,7 +581,7 @@ body.bems-booken-home {
 }
 
 .bems-hero-dot.is-active {
-  background: var(--bems-gold);
+  background: var(--bems-lime);
   width: 46px;
 }
 
@@ -791,7 +791,7 @@ body.bems-booken-home {
 
 .bems-category-card--business {
   --cat-bg: #f8f1e4;
-  --cat-accent: #bd842b;
+  --cat-accent: #88e04b;
   --cat-soft: rgba(189, 132, 43, 0.14);
 }
 
@@ -1046,8 +1046,8 @@ body.bems-booken-home {
 .bems-card-actions a:hover,
 .bems-card-actions button:hover,
 .bems-card-actions button.is-saved {
-  background: var(--bems-gold);
-  color: #fff;
+  background: var(--bems-lime);
+  color: var(--bems-ink);
   transform: scale(1.06);
 }
 
@@ -1086,7 +1086,7 @@ body.bems-booken-home {
 }
 
 .bems-product-content h4 a:hover {
-  color: var(--bems-gold);
+  color: var(--bems-lime);
 }
 
 .bems-product-meta {
@@ -1167,7 +1167,7 @@ body.bems-booken-home {
 }
 
 .bems-reading-path {
-  --path-accent: var(--bems-gold);
+  --path-accent: var(--bems-lime);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(246, 248, 245, 0.82)),
     #fff;
@@ -1251,7 +1251,7 @@ body.bems-booken-home {
 }
 
 .bems-reading-path--build {
-  --path-accent: #bd842b;
+  --path-accent: #88e04b;
 }
 
 .bems-reading-path--unwind {
@@ -1336,7 +1336,7 @@ body.bems-booken-home {
 }
 
 .bems-discount-content h3 {
-  color: var(--bems-gold);
+  color: var(--bems-lime);
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -1371,8 +1371,8 @@ body.bems-booken-home {
 }
 
 .bems-discount-content .banner_style_2:hover {
-  background: var(--bems-gold);
-  color: #fff;
+  background: var(--bems-lime);
+  color: var(--bems-ink);
 }
 
 .bems-discount-image {
@@ -1410,7 +1410,7 @@ body.bems-booken-home {
 }
 
 .bems-assurance {
-  border-left: 3px solid var(--bems-gold);
+  border-left: 3px solid var(--bems-lime);
   padding: 0 18px;
 }
 
@@ -1490,9 +1490,9 @@ body.bems-booken-home {
 
 .bems-reader-form button {
   align-items: center;
-  background: var(--bems-gold);
+  background: var(--bems-lime);
   border: 0;
-  color: #fff;
+  color: var(--bems-ink);
   cursor: pointer;
   display: inline-flex;
   font-weight: 800;
@@ -1542,7 +1542,7 @@ body.bems-booken-home {
 }
 
 .bems-reader-form button:hover {
-  background: var(--bems-gold-dark);
+  background: var(--bems-lime-dark);
   transform: translateY(-2px);
 }
 
@@ -1840,7 +1840,7 @@ body.bems-booken-home {
   position: absolute;
   width: 8px;
   height: 8px;
-  background: radial-gradient(circle, #bd842b, rgba(189, 132, 43, 0.4));
+  background: radial-gradient(circle, #88e04b, rgba(189, 132, 43, 0.4));
   border-radius: 50%;
   pointer-events: none;
   box-shadow: 0 0 8px rgba(189, 132, 43, 0.6);
