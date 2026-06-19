@@ -1427,20 +1427,20 @@ body.bems-booken-home {
   margin: 0;
 }
 
-.bems-memphis-graphic {
+.bems-assurance-photo {
   display: block;
-  max-width: 180px;
-  height: auto;
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
   margin-bottom: 24px;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(19, 39, 47, 0.08);
-  filter: brightness(0.92) contrast(0.95);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(19, 39, 47, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.bems-assurance:hover .bems-memphis-graphic {
+.bems-assurance:hover .bems-assurance-photo {
   transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(19, 39, 47, 0.12);
+  box-shadow: 0 12px 32px rgba(19, 39, 47, 0.12);
 }
 
 .bems-reader-list-area {
